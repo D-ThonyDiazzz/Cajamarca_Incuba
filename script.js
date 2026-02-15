@@ -307,32 +307,41 @@ async function goLast() {
 }
 
 // ================================
-// IR A PÁGINA ESPECÍFICA
+// IR A PÁGINA ESPECÍFICA (SIN LOADER)
 // ================================
 async function goToPage(target) {
     if (isAnimating) return;
 
     target = parseInt(target);
     if (isNaN(target) || target < 1 || target > totalPages) {
-        alert("Número de página inválido");
+        alert(`Por favor ingresa un número entre 1 y ${totalPages}`);
         return;
     }
 
-    if (!isMobile) {
-        if (target % 2 === 0) target--;
+    // Ajustar para vista doble página en escritorio
+    if (!isMobile && target % 2 === 0) {
+        target--;
     }
 
+    // Cambiar directamente SIN mostrar loader
+    isAnimating = true;
     pageNum = target;
-    loader.classList.remove("hidden");
     await renderSpreadState(pageNum);
-    loader.classList.add("hidden");
+    isAnimating = false;
     updateControls();
 
+    // Limpiar input
     const input = document.getElementById("gotoPageInput");
     if (input) {
         input.value = "";
         input.blur();
     }
+
+    // Scroll suave al libro
+    book.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'center' 
+    });
 }
 
 // ================================

@@ -1,107 +1,103 @@
 // ================================
-// Configuración PDF.js
+// CONFIGURACIÓN PDF.JS
 // ================================
-pdfjsLib.GlobalWorkerOptions.workerSrc =
-    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
-// Ruta de tu PDF
 const PDF_PATH = "assets/pdfs/LIBRO.pdf";
 
 // ================================
-// Configuración de páginas con VIDEO
+// CONFIGURACIÓN DE VIDEOS
 // ================================
 const videoPagesConfig = [
-    // Ejemplo: Video en página 3
-    { 
-        page: 3, 
-        src: "", // Si está vacío muestra el placeholder "Próximamente"
+    {
+        page: 3,
+        src: "",
         title: "Video Introductorio - Cajamarca Incuba",
         replaceContent: true
     }
 ];
 
 // ================================
-// Estado Global
+// VARIABLES GLOBALES
 // ================================
 let pdfDoc = null;
 let totalPages = 0;
-let pageNum = 1; // Siempre rastreamos la página IZQUIERDA actual (siempre impar)
-let isAnimating = false; // Bloqueo para no romper la animación
+let pageNum = 1;
+let isAnimating = false;
+let isMobile = false;
 
 // ================================
-// Elementos del DOM
+// ELEMENTOS DEL DOM
 // ================================
-const book = document.getElementById('book');
-const flipper = document.getElementById('flipper');
-const loader = document.getElementById('loader');
+const book = document.getElementById("book");
+const flipper = document.getElementById("flipper");
+const loader = document.getElementById("loader");
 
-// Canvas (Donde se pinta el PDF)
-const leftCanvas = document.getElementById('leftCanvas');
-const rightCanvas = document.getElementById('rightCanvas');
-const flipFrontCanvas = document.getElementById('flipFrontCanvas');
-const flipBackCanvas = document.getElementById('flipBackCanvas');
+// Canvas
+const leftCanvas = document.getElementById("leftCanvas");
+const rightCanvas = document.getElementById("rightCanvas");
+const flipFrontCanvas = document.getElementById("flipFrontCanvas");
+const flipBackCanvas = document.getElementById("flipBackCanvas");
 
-// Capas de Video (Donde van los videos)
-const leftVideoLayer = document.getElementById('leftVideoLayer');
-const rightVideoLayer = document.getElementById('rightVideoLayer');
-const flipFrontVideoLayer = document.getElementById('flipFrontVideoLayer');
-const flipBackVideoLayer = document.getElementById('flipBackVideoLayer');
+// Capas de video
+const leftVideoLayer = document.getElementById("leftVideoLayer");
+const rightVideoLayer = document.getElementById("rightVideoLayer");
+const flipFrontVideoLayer = document.getElementById("flipFrontVideoLayer");
+const flipBackVideoLayer = document.getElementById("flipBackVideoLayer");
 
 // Números de página
-const leftNumEl = document.getElementById('leftPageNum');
-const rightNumEl = document.getElementById('rightPageNum');
-const flipFrontNumEl = document.getElementById('flipFrontNum');
-const flipBackNumEl = document.getElementById('flipBackNum');
+const leftNumEl = document.getElementById("leftPageNum");
+const rightNumEl = document.getElementById("rightPageNum");
+const flipFrontNumEl = document.getElementById("flipFrontNum");
+const flipBackNumEl = document.getElementById("flipBackNum");
 
-// Botones y Controles
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
-const pageIndicator = document.getElementById('pageIndicator');
-const progressFill = document.getElementById('progressFill'); // Si tienes barra de progreso
+// Botones y controles
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+const pageIndicator = document.getElementById("pageIndicator");
+const progressFill = document.getElementById("progressFill");
+
+// Móvil
+const mobilePrev = document.getElementById("mobilePrev");
+const mobileNext = document.getElementById("mobileNext");
+const mobilePageIndicator = document.getElementById("mobilePageIndicator");
 
 // ================================
-// 1. Lógica de Videos
+// FUNCIONES DE VIDEO
 // ================================
-function getVideoConfigForPage(pNum) {
-    return videoPagesConfig.find(v => v.page === pNum);
+function getVideoConfigForPage(pageNumber) {
+    return videoPagesConfig.find(v => v.page === pageNumber);
 }
 
-function setVideoOnLayer(layerEl, pNum, canvasEl) {
-    // Limpiamos la capa
+function setVideoOnLayer(layerEl, pageNumber, canvasEl) {
     layerEl.innerHTML = "";
-    layerEl.className = "video-layer"; // Reset clases
+    layerEl.className = "video-layer";
     layerEl.classList.remove("active", "replace-mode");
 
-    const config = getVideoConfigForPage(pNum);
+    const config = getVideoConfigForPage(pageNumber);
 
-    // Si no hay video para esta página, ocultar capa y mostrar canvas
     if (!config) {
         layerEl.style.display = "none";
         if (canvasEl) canvasEl.style.display = "block";
         return;
     }
 
-    // Si hay video, configurar capa
     layerEl.style.display = "flex";
     layerEl.classList.add("active");
 
-    // Lógica Replace vs Overlay
     if (config.replaceContent) {
-        if (canvasEl) canvasEl.style.display = "none"; // Ocultar PDF
+        if (canvasEl) canvasEl.style.display = "none";
         layerEl.classList.add("replace-mode");
     } else {
-        if (canvasEl) canvasEl.style.display = "block"; // Mostrar PDF fondo
+        if (canvasEl) canvasEl.style.display = "block";
     }
 
-    // Badge (Etiqueta)
     const badge = document.createElement("div");
     badge.className = "video-badge";
-    badge.innerHTML = '<i class="fas fa-video"></i> ' + (config.replaceContent ? 'VIDEO' : 'EXTRA');
+    badge.innerHTML = '<i class="fas fa-video"></i> ' + (config.replaceContent ? "TESTIMONIO" : "MULTIMEDIA");
     layerEl.appendChild(badge);
 
-    // Contenido: Placeholder o Video Real
     if (!config.src) {
-        // Placeholder
         const placeholder = document.createElement("div");
         placeholder.className = "video-placeholder";
         placeholder.innerHTML = `
@@ -111,10 +107,8 @@ function setVideoOnLayer(layerEl, pNum, canvasEl) {
         `;
         layerEl.appendChild(placeholder);
     } else {
-        // Video Iframe / Tag
         const vidContainer = document.createElement("div");
         vidContainer.className = "video-container";
-        // Aquí podrías usar un <video> local o un iframe de YouTube
         vidContainer.innerHTML = `
             <div class="video-title"><i class="fas fa-play"></i> ${config.title}</div>
             <video controls src="${config.src}" style="width:100%; border-radius:8px;"></video>
@@ -124,35 +118,26 @@ function setVideoOnLayer(layerEl, pNum, canvasEl) {
 }
 
 // ================================
-// 2. Renderizado de PDF
+// RENDERIZADO DE PDF
 // ================================
-async function renderPage(pNum, canvas, videoLayer, numEl) {
-    const ctx = canvas.getContext('2d');
-    
-    // Si la página está fuera de rango (ej: página 0 o mayor al total)
-    if (pNum < 1 || pNum > totalPages) {
+async function renderPage(pageNumber, canvas, videoLayer, numEl) {
+    const ctx = canvas.getContext("2d");
+
+    if (pageNumber < 1 || pageNumber > totalPages) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         if (videoLayer) videoLayer.style.display = "none";
         if (numEl) numEl.innerText = "";
         return;
     }
 
-    // Renderizar número de página
-    if (numEl) numEl.innerText = pNum;
+    if (numEl) numEl.innerText = pageNumber;
+    if (videoLayer) setVideoOnLayer(videoLayer, pageNumber, canvas);
 
-    // Renderizar Video (y decidir si ocultar canvas)
-    if (videoLayer) setVideoOnLayer(videoLayer, pNum, canvas);
-
-    // Si hay video full-screen, no gastamos recursos renderizando el PDF abajo
-    const config = getVideoConfigForPage(pNum);
+    const config = getVideoConfigForPage(pageNumber);
     if (config && config.replaceContent) return;
 
-    // Renderizar PDF
     try {
-        const page = await pdfDoc.getPage(pNum);
-        
-        // Calcular escala para alta calidad (Retina support)
-        // Usamos un valor fijo de escala base o calculamos según contenedor
+        const page = await pdfDoc.getPage(pageNumber);
         const viewport = page.getViewport({ scale: 1.5 });
 
         canvas.width = viewport.width;
@@ -164,13 +149,13 @@ async function renderPage(pNum, canvas, videoLayer, numEl) {
         };
 
         await page.render(renderContext).promise;
-    } catch (e) {
-        console.error("Error renderizando pág " + pNum, e);
+    } catch (error) {
+        console.error("Error renderizando página " + pageNumber, error);
     }
 }
 
 // ================================
-// 3. Inicialización
+// INICIALIZACIÓN
 // ================================
 async function init() {
     try {
@@ -178,238 +163,381 @@ async function init() {
         pdfDoc = await loadingTask.promise;
         totalPages = pdfDoc.numPages;
 
-        // Renderizar estado inicial (Páginas 1 y 2)
+        const gotoInput = document.getElementById("gotoPageInput");
+        if (gotoInput) {
+            gotoInput.max = totalPages;
+        }
+
+        checkMobile();
         await renderSpreadState(pageNum);
 
-        // Ocultar loader
         setTimeout(() => {
-            loader.classList.add('hidden');
+            loader.classList.add("hidden");
         }, 500);
 
         updateControls();
-        generateTOC(); // Generar índice
+        generateTOC();
+        generateVideoList();
     } catch (error) {
         console.error("Error crítico:", error);
         alert("No se pudo cargar el PDF. Verifica la ruta en script.js");
-        loader.style.display = 'none';
+        loader.style.display = "none";
     }
 }
 
-// Función auxiliar para renderizar el estado estático actual
-async function renderSpreadState(currentLeft) {
-    // Izquierda estática
-    await renderPage(currentLeft, leftCanvas, leftVideoLayer, leftNumEl);
-    // Derecha estática
-    await renderPage(currentLeft + 1, rightCanvas, rightVideoLayer, rightNumEl);
+// ================================
+// DETECTAR MÓVIL
+// ================================
+function checkMobile() {
+    isMobile = window.innerWidth <= 768;
 }
 
 // ================================
-// 4. Lógica de Animación (FLIP)
+// RENDERIZAR DOBLE PÁGINA
 // ================================
+async function renderSpreadState(currentLeft) {
+    if (isMobile) {
+        await renderPage(currentLeft, leftCanvas, leftVideoLayer, leftNumEl);
+        const ctx = rightCanvas.getContext("2d");
+        ctx.clearRect(0, 0, rightCanvas.width, rightCanvas.height);
+    } else {
+        await renderPage(currentLeft, leftCanvas, leftVideoLayer, leftNumEl);
+        await renderPage(currentLeft + 1, rightCanvas, rightVideoLayer, rightNumEl);
+    }
+}
 
-// AVANZAR PÁGINA (Flip de Derecha a Izquierda)
+// ================================
+// ANIMACIÓN FLIP SIGUIENTE
+// ================================
 async function flipNext() {
-    // Validaciones: si ya anima o si no hay más páginas
+    if (isMobile) return mobileTurnPage(1);
     if (isAnimating || pageNum + 2 > totalPages + 1) return;
+
     isAnimating = true;
 
-    // --- PASO 1: PREPARAR EL ESCENARIO ---
-    // El "Flipper" es la hoja que se mueve.
-    // Front = La página que estaba a la derecha (se levanta) -> Pág Actual + 1
-    // Back  = La página que aparecerá a la izquierda (aterriza) -> Pág Actual + 2
-    
-    // Renderizamos el flipper
     await renderPage(pageNum + 1, flipFrontCanvas, flipFrontVideoLayer, flipFrontNumEl);
     await renderPage(pageNum + 2, flipBackCanvas, flipBackVideoLayer, flipBackNumEl);
-
-    // Renderizamos qué hay DEBAJO a la derecha (la futura página derecha)
-    // Es la página Actual + 3
     await renderPage(pageNum + 3, rightCanvas, rightVideoLayer, rightNumEl);
 
-    // La izquierda estática se queda como está (Pág Actual) hasta que la hoja le caiga encima
-
-    // --- PASO 2: ACTIVAR ANIMACIÓN CSS ---
-    flipper.style.display = 'block';
-    flipper.classList.add('animating'); // Activa display block
-    
-    // Forzar reflow para reiniciar animación si es necesario
-    void flipper.offsetWidth; 
-    
-    flipper.classList.add('flip-next-anim');
-
-    // --- PASO 3: FINALIZAR (Sincronizado con CSS 1.2s) ---
-    setTimeout(async () => {
-        // Actualizamos lógica
-        pageNum += 2;
-        
-        // Ahora la página izquierda estática es la nueva (la que aterrizó)
-        await renderPage(pageNum, leftCanvas, leftVideoLayer, leftNumEl);
-        
-        // Limpiamos animación
-        flipper.classList.remove('animating', 'flip-next-anim');
-        flipper.style.display = 'none';
-        
-        isAnimating = false;
-        updateControls();
-    }, 1200); // Mismo tiempo que --anim-speed en CSS
-}
-
-// RETROCEDER PÁGINA (Flip de Izquierda a Derecha)
-async function flipPrev() {
-    if (isAnimating || pageNum <= 1) return;
-    isAnimating = true;
-
-    const targetLeft = pageNum - 2; // A donde queremos llegar
-
-    // --- PASO 1: PREPARAR EL ESCENARIO ---
-    // En el modo 'prev', el flipper empieza "cerrado" a la izquierda (-180deg) y se abre a la derecha.
-    
-    // Back = La página que se levanta de la izquierda -> Pág Actual (pageNum)
-    // Front = La página que aterriza en la derecha -> Pág Anterior Derecha (pageNum - 1)
-    
-    await renderPage(pageNum, flipBackCanvas, flipBackVideoLayer, flipBackNumEl);
-    await renderPage(pageNum - 1, flipFrontCanvas, flipFrontVideoLayer, flipFrontNumEl);
-
-    // Renderizamos qué hay DEBAJO a la izquierda (la futura página izquierda)
-    await renderPage(targetLeft, leftCanvas, leftVideoLayer, leftNumEl);
-
-    // La derecha estática se queda temporalmente con la página que será tapada
-
-    // --- PASO 2: ACTIVAR ANIMACIÓN CSS ---
-    flipper.style.display = 'block';
-    flipper.classList.add('animating');
+    flipper.style.display = "block";
+    flipper.classList.add("animating");
     void flipper.offsetWidth;
-    flipper.classList.add('flip-prev-anim');
+    flipper.classList.add("flip-next-anim");
 
-    // --- PASO 3: FINALIZAR ---
     setTimeout(async () => {
-        pageNum -= 2;
-        
-        // Actualizamos la derecha estática (la que aterrizó)
-        await renderPage(pageNum + 1, rightCanvas, rightVideoLayer, rightNumEl);
-        
-        flipper.classList.remove('animating', 'flip-prev-anim');
-        flipper.style.display = 'none';
-        
+        pageNum += 2;
+        await renderPage(pageNum, leftCanvas, leftVideoLayer, leftNumEl);
+
+        flipper.classList.remove("animating", "flip-next-anim");
+        flipper.style.display = "none";
+
         isAnimating = false;
         updateControls();
     }, 1200);
 }
 
 // ================================
-// 5. Controles y UI
+// ANIMACIÓN FLIP ANTERIOR
 // ================================
-function updateControls() {
-    // Texto indicador
-    const lastPage = Math.min(pageNum + 1, totalPages);
-    pageIndicator.innerHTML = `<i class="fas fa-book"></i> Páginas ${pageNum}-${lastPage} de ${totalPages}`;
-    
-    // Botones estado
-    prevBtn.disabled = pageNum <= 1;
-    nextBtn.disabled = pageNum + 1 >= totalPages;
+async function flipPrev() {
+    if (isMobile) return mobileTurnPage(-1);
+    if (isAnimating || pageNum <= 1) return;
 
-    // Barra de progreso (si existe en tu HTML)
-    if (progressFill) {
-        const pct = ((pageNum + 1) / totalPages) * 100;
-        progressFill.style.width = `${pct}%`;
-    }
+    isAnimating = true;
+
+    const targetLeft = pageNum - 2;
+
+    await renderPage(pageNum, flipBackCanvas, flipBackVideoLayer, flipBackNumEl);
+    await renderPage(pageNum - 1, flipFrontCanvas, flipFrontVideoLayer, flipFrontNumEl);
+    await renderPage(targetLeft, leftCanvas, leftVideoLayer, leftNumEl);
+
+    flipper.style.display = "block";
+    flipper.classList.add("animating");
+    void flipper.offsetWidth;
+    flipper.classList.add("flip-prev-anim");
+
+    setTimeout(async () => {
+        pageNum -= 2;
+        await renderPage(pageNum + 1, rightCanvas, rightVideoLayer, rightNumEl);
+
+        flipper.classList.remove("animating", "flip-prev-anim");
+        flipper.style.display = "none";
+
+        isAnimating = false;
+        updateControls();
+    }, 1200);
 }
 
-// Ir a página específica
+// ================================
+// NAVEGACIÓN MÓVIL
+// ================================
+async function mobileTurnPage(direction) {
+    if (isAnimating) return;
+
+    const targetPage = pageNum + direction;
+
+    if (targetPage < 1 || targetPage > totalPages) return;
+
+    isAnimating = true;
+    pageNum = targetPage;
+    await renderSpreadState(pageNum);
+    isAnimating = false;
+    updateControls();
+}
+
+// ================================
+// IR A PRIMERA PÁGINA
+// ================================
+async function goFirst() {
+    if (isAnimating) return;
+    pageNum = 1;
+    await renderSpreadState(pageNum);
+    updateControls();
+}
+
+// ================================
+// IR A ÚLTIMA PÁGINA
+// ================================
+async function goLast() {
+    if (isAnimating) return;
+    const lastLeft = totalPages % 2 === 0 ? totalPages - 1 : totalPages;
+    pageNum = lastLeft;
+    await renderSpreadState(pageNum);
+    updateControls();
+}
+
+// ================================
+// IR A PÁGINA ESPECÍFICA
+// ================================
 async function goToPage(target) {
     if (isAnimating) return;
-    
+
     target = parseInt(target);
     if (isNaN(target) || target < 1 || target > totalPages) {
         alert("Número de página inválido");
         return;
     }
 
-    // Convertir a impar (lado izquierdo)
-    if (target % 2 === 0) target--; 
-    
+    if (!isMobile) {
+        if (target % 2 === 0) target--;
+    }
+
     pageNum = target;
-    loader.classList.remove('hidden'); // Mostrar loader brevemente
+    loader.classList.remove("hidden");
     await renderSpreadState(pageNum);
-    loader.classList.add('hidden');
+    loader.classList.add("hidden");
     updateControls();
+
+    const input = document.getElementById("gotoPageInput");
+    if (input) {
+        input.value = "";
+        input.blur();
+    }
 }
 
 // ================================
-// 6. Event Listeners
+// ACTUALIZAR CONTROLES
 // ================================
-prevBtn.addEventListener('click', flipPrev);
-nextBtn.addEventListener('click', flipNext);
+function updateControls() {
+    const lastPage = isMobile ? pageNum : Math.min(pageNum + 1, totalPages);
 
-// Teclado
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight') flipNext();
-    if (e.key === 'ArrowLeft') flipPrev();
-});
+    pageIndicator.innerHTML = `<i class="fas fa-book"></i> ${
+        isMobile
+            ? `Página ${pageNum} de ${totalPages}`
+            : `Páginas ${pageNum}-${lastPage} de ${totalPages}`
+    }`;
 
-// Ir a página Input
-const gotoInput = document.getElementById('gotoPageInput');
-const gotoBtn = document.getElementById('gotoPageBtn');
+    if (isMobile) {
+        const canGoPrev = pageNum <= 1;
+        const canGoNext = pageNum >= totalPages;
 
-if(gotoBtn) {
-    gotoBtn.addEventListener('click', () => {
-        goToPage(gotoInput.value);
+        if (mobilePrev) mobilePrev.disabled = canGoPrev;
+        if (mobileNext) mobileNext.disabled = canGoNext;
+        if (mobilePageIndicator) {
+            mobilePageIndicator.innerText = `${pageNum} / ${totalPages}`;
+        }
+    } else {
+        prevBtn.disabled = pageNum <= 1;
+        nextBtn.disabled = pageNum + 1 >= totalPages;
+    }
+
+    if (progressFill) {
+        const progress = isMobile
+            ? (pageNum / totalPages) * 100
+            : ((pageNum + 1) / totalPages) * 100;
+        progressFill.style.width = `${progress}%`;
+    }
+
+    document.querySelectorAll(".toc-item").forEach(item => {
+        const lp = parseInt(item.dataset.leftPage, 10);
+        if (lp === pageNum) item.classList.add("active");
+        else item.classList.remove("active");
     });
 }
-if(gotoInput) {
-    gotoInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') goToPage(gotoInput.value);
-    });
-}
 
-// Generar Índice Lateral
+// ================================
+// GENERAR ÍNDICE
+// ================================
 function generateTOC() {
-    const toc = document.getElementById('tableOfContents');
+    const toc = document.getElementById("tableOfContents");
     if (!toc) return;
     toc.innerHTML = "";
-    
-    // Creamos items cada 2 páginas
+
     for (let i = 1; i <= totalPages; i += 2) {
-        const item = document.createElement('div');
-        item.className = 'toc-item';
+        const item = document.createElement("div");
+        item.className = "toc-item";
+        item.dataset.leftPage = i;
         item.innerHTML = `
-            <span class="toc-title">Páginas ${i}-${Math.min(i+1, totalPages)}</span>
+            <span class="toc-title">Páginas ${i}-${Math.min(i + 1, totalPages)}</span>
+            <span class="toc-page">${i}-${Math.min(i + 1, totalPages)}</span>
         `;
         item.onclick = () => {
             goToPage(i);
-            // Cerrar sidebar si existe función
-            const sidebar = document.getElementById('sidebar');
-            if(sidebar) sidebar.classList.remove('active');
-            const overlay = document.getElementById('sidebarOverlay');
-            if(overlay) overlay.classList.remove('active');
+            closeSidebar();
         };
         toc.appendChild(item);
     }
 }
 
-// Sidebar Toggles (usando tu HTML original)
-const toggleMenu = document.getElementById('toggleMenu');
-const closeSidebarBtn = document.getElementById('closeSidebar');
-const sidebarOverlay = document.getElementById('sidebarOverlay');
-const sidebar = document.getElementById('sidebar');
+// ================================
+// GENERAR LISTA DE VIDEOS
+// ================================
+function generateVideoList() {
+    const container = document.getElementById("videoPagesList");
+    if (!container) return;
+    container.innerHTML = "";
 
-function toggleSidebar() {
-    sidebar.classList.toggle('active');
-    sidebarOverlay.classList.toggle('active');
+    if (videoPagesConfig.length === 0) {
+        container.innerHTML = '<p style="padding: 0.5rem; color: var(--text-light); font-size: 0.9rem;">No hay videos configurados</p>';
+        return;
+    }
+
+    videoPagesConfig.forEach(v => {
+        const btn = document.createElement("button");
+        btn.innerHTML = `
+            <span>Página ${v.page}: ${v.title}</span>
+            <i class="fas fa-play-circle"></i>
+        `;
+        btn.addEventListener("click", async () => {
+            const left = v.page % 2 === 0 ? v.page - 1 : v.page;
+            await goToPage(left);
+            closeSidebar();
+        });
+        container.appendChild(btn);
+    });
 }
 
-if(toggleMenu) toggleMenu.addEventListener('click', toggleSidebar);
-if(closeSidebarBtn) closeSidebarBtn.addEventListener('click', toggleSidebar);
-if(sidebarOverlay) sidebarOverlay.addEventListener('click', toggleSidebar);
+// ================================
+// EVENT LISTENERS
+// ================================
+if (prevBtn) prevBtn.addEventListener("click", flipPrev);
+if (nextBtn) nextBtn.addEventListener("click", flipNext);
+if (mobilePrev) mobilePrev.addEventListener("click", flipPrev);
+if (mobileNext) mobileNext.addEventListener("click", flipNext);
 
-// Resize handler
+document.addEventListener("keydown", e => {
+    const gotoInput = document.getElementById("gotoPageInput");
+    if (document.activeElement === gotoInput) return;
+
+    if (e.key === "ArrowRight" || e.key === "PageDown") {
+        e.preventDefault();
+        flipNext();
+    } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+        e.preventDefault();
+        flipPrev();
+    } else if (e.key === "Home") {
+        e.preventDefault();
+        goFirst();
+    } else if (e.key === "End") {
+        e.preventDefault();
+        goLast();
+    } else if (e.key === "Escape") {
+        closeSidebar();
+    }
+});
+
+const gotoInput = document.getElementById("gotoPageInput");
+const gotoBtn = document.getElementById("gotoPageBtn");
+
+if (gotoBtn) {
+    gotoBtn.addEventListener("click", () => {
+        if (gotoInput.value) goToPage(gotoInput.value);
+    });
+}
+
+if (gotoInput) {
+    gotoInput.addEventListener("keypress", e => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            if (gotoInput.value) goToPage(gotoInput.value);
+        }
+    });
+
+    gotoInput.addEventListener("focus", () => {
+        if (totalPages > 0) {
+            gotoInput.max = totalPages;
+        }
+    });
+}
+
+// ================================
+// SIDEBAR
+// ================================
+const toggleMenu = document.getElementById("toggleMenu");
+const closeSidebarBtn = document.getElementById("closeSidebar");
+const sidebarOverlay = document.getElementById("sidebarOverlay");
+const sidebar = document.getElementById("sidebar");
+
+function toggleSidebar() {
+    sidebar.classList.toggle("active");
+    sidebarOverlay.classList.toggle("active");
+}
+
+function closeSidebar() {
+    sidebar.classList.remove("active");
+    sidebarOverlay.classList.remove("active");
+}
+
+if (toggleMenu) toggleMenu.addEventListener("click", toggleSidebar);
+if (closeSidebarBtn) closeSidebarBtn.addEventListener("click", closeSidebar);
+if (sidebarOverlay) sidebarOverlay.addEventListener("click", closeSidebar);
+
+// ================================
+// GESTOS TÁCTILES
+// ================================
+let touchStartX = 0;
+let touchEndX = 0;
+
+book.addEventListener("touchstart", e => {
+    touchStartX = e.changedTouches[0].screenX;
+});
+
+book.addEventListener("touchend", e => {
+    touchEndX = e.changedTouches[0].screenX;
+    const diff = touchStartX - touchEndX;
+    if (Math.abs(diff) > 60) {
+        if (diff > 0) flipNext();
+        else flipPrev();
+    }
+});
+
+// ================================
+// RESIZE
+// ================================
 let resizeTimeout;
-window.addEventListener('resize', () => {
+window.addEventListener("resize", () => {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
-        if(!isAnimating) renderSpreadState(pageNum);
+        const wasMobile = isMobile;
+        checkMobile();
+        if (wasMobile !== isMobile) {
+            renderSpreadState(pageNum);
+        }
+        if (!isAnimating) renderSpreadState(pageNum);
     }, 300);
 });
 
-// Arrancar
+// ================================
+// INICIAR
+// ================================
 init();

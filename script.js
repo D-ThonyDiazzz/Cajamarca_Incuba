@@ -10,9 +10,10 @@ const PDF_PATH = "assets/pdfs/LIBRO.pdf";
 // ================================
 const videoPagesConfig = [
     {
-        page: 3,
-        src: "",
-        title: "Video Introductorio - Cajamarca Incuba",
+        page: 70,  // Página donde aparece Azul Sostenible
+        videoId: "3ZJay045efg",
+        title: "Azul Sostenible",
+        autoplay: true,  // Reproducción automática
         replaceContent: true
     }
 ];
@@ -92,29 +93,51 @@ function setVideoOnLayer(layerEl, pageNumber, canvasEl) {
         if (canvasEl) canvasEl.style.display = "block";
     }
 
+    // Badge
     const badge = document.createElement("div");
     badge.className = "video-badge";
-    badge.innerHTML = '<i class="fas fa-video"></i> ' + (config.replaceContent ? "TESTIMONIO" : "MULTIMEDIA");
+    badge.innerHTML = '<i class="fas fa-video"></i> TESTIMONIO';
     layerEl.appendChild(badge);
 
-    if (!config.src) {
-        const placeholder = document.createElement("div");
-        placeholder.className = "video-placeholder";
-        placeholder.innerHTML = `
-            <div class="video-placeholder-icon"><i class="fas fa-play-circle"></i></div>
-            <div class="video-placeholder-text">${config.title}</div>
-            <div class="video-placeholder-subtitle">Próximamente disponible</div>
-        `;
-        layerEl.appendChild(placeholder);
-    } else {
-        const vidContainer = document.createElement("div");
-        vidContainer.className = "video-container";
+    // Contenedor principal
+    const vidContainer = document.createElement("div");
+    vidContainer.className = "video-container";
+
+    if (!config.videoId) {
+        // Placeholder si no hay video
         vidContainer.innerHTML = `
-            <div class="video-title"><i class="fas fa-play"></i> ${config.title}</div>
-            <video controls src="${config.src}" style="width:100%; border-radius:8px;"></video>
+            <div class="video-placeholder">
+                <div class="video-placeholder-icon"><i class="fas fa-play-circle"></i></div>
+                <div class="video-placeholder-text">${config.title}</div>
+                <div class="video-placeholder-subtitle">Video próximamente disponible</div>
+            </div>
         `;
-        layerEl.appendChild(vidContainer);
+    } else {
+        // Autoplay: mute=1&autoplay=1
+        const autoplayParams = config.autoplay ? "&mute=1&autoplay=1" : "";
+        
+        // Video de YouTube con autoplay
+        vidContainer.innerHTML = `
+            <div class="video-header">
+                <h3 class="video-main-title">
+                    <i class="fas fa-store"></i> ${config.title}
+                </h3>
+            </div>
+            
+            <div class="video-responsive">
+                <iframe
+                    src="https://www.youtube.com/embed/${config.videoId}?rel=0&modestbranding=1&color=white&playsinline=1${autoplayParams}"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen
+                    loading="lazy"
+                    title="${config.title}"
+                ></iframe>
+            </div>
+        `;
     }
+
+    layerEl.appendChild(vidContainer);
 }
 
 // ================================
@@ -307,7 +330,7 @@ async function goLast() {
 }
 
 // ================================
-// IR A PÁGINA ESPECÍFICA (SIN LOADER)
+// IR A PÁGINA ESPECÍFICA
 // ================================
 async function goToPage(target) {
     if (isAnimating) return;

@@ -6,17 +6,31 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs
 const PDF_PATH = "assets/pdfs/LIBRO.pdf";
 
 // ================================
+// 🔍 DEBUG CONSOLA - VERIFICACIÓN INICIAL
+// ================================
+console.log("═══════════════════════════════════════════");
+console.log("✅ Script cargado correctamente");
+console.log("📁 Ruta del PDF configurada:", PDF_PATH);
+console.log("🔧 PDF.js Worker URL:", pdfjsLib.GlobalWorkerOptions.workerSrc);
+console.log("🌐 PDF.js versión:", pdfjsLib.version || "No disponible");
+console.log("📱 User Agent:", navigator.userAgent);
+console.log("🖥️ Ancho de ventana:", window.innerWidth, "px");
+console.log("═══════════════════════════════════════════");
+
+// ================================
 // CONFIGURACIÓN DE VIDEOS
 // ================================
 const videoPagesConfig = [
     {
-        page: 70,  // Página donde aparece Azul Sostenible
+        page: 70,
         videoId: "3ZJay045efg",
         title: "Azul Sostenible",
-        autoplay: true,  // Reproducción automática
+        autoplay: true,
         replaceContent: true
     }
 ];
+
+console.log("🎬 Videos configurados:", videoPagesConfig.length);
 
 // ================================
 // VARIABLES GLOBALES
@@ -63,6 +77,17 @@ const mobilePrev = document.getElementById("mobilePrev");
 const mobileNext = document.getElementById("mobileNext");
 const mobilePageIndicator = document.getElementById("mobilePageIndicator");
 
+// 🔍 DEBUG - Verificar elementos DOM
+console.log("═══════════════════════════════════════════");
+console.log("🔍 VERIFICACIÓN DE ELEMENTOS DOM:");
+console.log("  ✓ book:", book ? "✅ Encontrado" : "❌ NO ENCONTRADO");
+console.log("  ✓ loader:", loader ? "✅ Encontrado" : "❌ NO ENCONTRADO");
+console.log("  ✓ leftCanvas:", leftCanvas ? "✅ Encontrado" : "❌ NO ENCONTRADO");
+console.log("  ✓ rightCanvas:", rightCanvas ? "✅ Encontrado" : "❌ NO ENCONTRADO");
+console.log("  ✓ prevBtn:", prevBtn ? "✅ Encontrado" : "❌ NO ENCONTRADO");
+console.log("  ✓ nextBtn:", nextBtn ? "✅ Encontrado" : "❌ NO ENCONTRADO");
+console.log("═══════════════════════════════════════════");
+
 // ================================
 // FUNCIONES DE VIDEO
 // ================================
@@ -82,6 +107,8 @@ function setVideoOnLayer(layerEl, pageNumber, canvasEl) {
         if (canvasEl) canvasEl.style.display = "block";
         return;
     }
+
+    console.log("🎬 Cargando video en página", pageNumber, ":", config.title);
 
     layerEl.style.display = "flex";
     layerEl.classList.add("active");
@@ -104,7 +131,6 @@ function setVideoOnLayer(layerEl, pageNumber, canvasEl) {
     vidContainer.className = "video-container";
 
     if (!config.videoId) {
-        // Placeholder si no hay video
         vidContainer.innerHTML = `
             <div class="video-placeholder">
                 <div class="video-placeholder-icon"><i class="fas fa-play-circle"></i></div>
@@ -113,10 +139,7 @@ function setVideoOnLayer(layerEl, pageNumber, canvasEl) {
             </div>
         `;
     } else {
-        // Autoplay: mute=1&autoplay=1
         const autoplayParams = config.autoplay ? "&mute=1&autoplay=1" : "";
-        
-        // Video de YouTube con autoplay
         vidContainer.innerHTML = `
             <div class="video-header">
                 <h3 class="video-main-title">
@@ -153,6 +176,8 @@ async function renderPage(pageNumber, canvas, videoLayer, numEl) {
         return;
     }
 
+    console.log(`📄 Renderizando página ${pageNumber}`);
+
     if (numEl) numEl.innerText = pageNumber;
     if (videoLayer) setVideoOnLayer(videoLayer, pageNumber, canvas);
 
@@ -172,8 +197,9 @@ async function renderPage(pageNumber, canvas, videoLayer, numEl) {
         };
 
         await page.render(renderContext).promise;
+        console.log(`✅ Página ${pageNumber} renderizada correctamente`);
     } catch (error) {
-        console.error("Error renderizando página " + pageNumber, error);
+        console.error(`❌ Error renderizando página ${pageNumber}:`, error);
     }
 }
 
@@ -181,29 +207,76 @@ async function renderPage(pageNumber, canvas, videoLayer, numEl) {
 // INICIALIZACIÓN
 // ================================
 async function init() {
+    console.log("═══════════════════════════════════════════");
+    console.log("🚀 INICIANDO CARGA DEL PDF...");
+    console.log("═══════════════════════════════════════════");
+
     try {
+        console.log("📥 Intentando cargar:", PDF_PATH);
+        
         const loadingTask = pdfjsLib.getDocument(PDF_PATH);
+        
+        console.log("⏳ Esperando respuesta del PDF...");
+        
         pdfDoc = await loadingTask.promise;
+        
+        console.log("✅ PDF CARGADO EXITOSAMENTE");
+        
         totalPages = pdfDoc.numPages;
+        
+        console.log("═══════════════════════════════════════════");
+        console.log("📚 INFORMACIÓN DEL LIBRO:");
+        console.log("  📖 Total de páginas:", totalPages);
+        console.log("  📄 Página actual:", pageNum);
+        console.log("═══════════════════════════════════════════");
 
         const gotoInput = document.getElementById("gotoPageInput");
         if (gotoInput) {
             gotoInput.max = totalPages;
         }
 
+        console.log("📱 Detectando tipo de dispositivo...");
         checkMobile();
+        console.log("  Dispositivo:", isMobile ? "📱 MÓVIL" : "🖥️ ESCRITORIO");
+
+        console.log("🎨 Renderizando páginas iniciales...");
         await renderSpreadState(pageNum);
 
+        console.log("✨ Ocultando loader...");
         setTimeout(() => {
             loader.classList.add("hidden");
+            console.log("✅ Loader oculto - LIBRO LISTO");
         }, 500);
 
         updateControls();
         generateTOC();
         generateVideoList();
+
+        console.log("═══════════════════════════════════════════");
+        console.log("🎉 INICIALIZACIÓN COMPLETA - LIBRO FUNCIONAL");
+        console.log("═══════════════════════════════════════════");
+
     } catch (error) {
-        console.error("Error crítico:", error);
-        alert("No se pudo cargar el PDF. Verifica la ruta en script.js");
+        console.log("═══════════════════════════════════════════");
+        console.error("❌ ERROR CRÍTICO AL CARGAR EL PDF:");
+        console.error("📁 Ruta intentada:", PDF_PATH);
+        console.error("🔴 Tipo de error:", error.name);
+        console.error("💬 Mensaje:", error.message);
+        console.error("📋 Detalles completos:", error);
+        console.log("═══════════════════════════════════════════");
+        
+        console.log("🔍 POSIBLES SOLUCIONES:");
+        console.log("  1. Verifica que la carpeta sea 'assets/pdf/' o 'assets/pdfs/'");
+        console.log("  2. Verifica que el archivo se llame exactamente 'LIBRO.pdf'");
+        console.log("  3. Verifica que el archivo exista en la ruta correcta");
+        console.log("  4. Abre la consola Network (Red) para ver el error HTTP");
+        console.log("═══════════════════════════════════════════");
+        
+        alert("❌ ERROR: No se pudo cargar el PDF\n\n" + 
+              "Ruta: " + PDF_PATH + "\n" +
+              "Error: " + error.message + "\n\n" +
+              "Abre la consola (F12) para más detalles.");
+        
         loader.style.display = "none";
     }
 }
@@ -214,6 +287,9 @@ async function init() {
 function checkMobile() {
     isMobile = window.innerWidth <= 768;
 }
+
+// ... (resto del código igual)
+
 
 // ================================
 // RENDERIZAR DOBLE PÁGINA

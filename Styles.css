@@ -87,10 +87,9 @@ body {
   height: 80px; 
   width: 200 px; 
   border-radius: 8px; 
-  background: white; 
   padding: 4px 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 0 20px rgba(244, 195, 0, 0.3);
   transition: transform 0.3s ease;
+  margin-left: 160px;
 }
 
 .logo:hover img { 
@@ -116,12 +115,6 @@ body {
   white-space: nowrap;
 }
 
-.book-title-header { 
-  text-align: center; 
-  color: white; 
-  animation: fadeInDown 0.8s ease-out 0.2s both;
-  flex: 1;
-}
 
 @keyframes fadeInDown { 
   from { 

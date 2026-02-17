@@ -272,7 +272,7 @@ async function init() {
         console.log("  4. Abre la consola Network (Red) para ver el error HTTP");
         console.log("═══════════════════════════════════════════");
         
-        alert("❌ ERROR: No se pudo cargar el PDF\n\n" + 
+        alert("❌ ERROR: No se pudo cargar el PDF, reinicie la página\n\n" + 
               "Ruta: " + PDF_PATH + "\n" +
               "Error: " + error.message + "\n\n" +
               "Abre la consola (F12) para más detalles.");

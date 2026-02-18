@@ -41,6 +41,11 @@ let pageNum = 1;
 let isAnimating = false;
 let isMobile = false;
 
+// ✅ NUEVO - Variables anti-zoom
+let isZooming = false;
+let touchStartDistance = 0;
+let initialTouches = 0;
+
 // ================================
 // ELEMENTOS DEL DOM
 // ================================
@@ -201,6 +206,15 @@ async function renderPage(pageNumber, canvas, videoLayer, numEl) {
     } catch (error) {
         console.error(`❌ Error renderizando página ${pageNumber}:`, error);
     }
+}
+
+// ================================
+// FUNCIÓN ANTI-ZOOM
+// ================================
+function getDistance(touch1, touch2) {
+    const dx = touch1.screenX - touch2.screenX;
+    const dy = touch1.screenY - touch2.screenY;
+    return Math.sqrt(dx * dx + dy * dy);
 }
 
 // ================================
@@ -611,23 +625,98 @@ if (closeSidebarBtn) closeSidebarBtn.addEventListener("click", closeSidebar);
 if (sidebarOverlay) sidebarOverlay.addEventListener("click", closeSidebar);
 
 // ================================
-// GESTOS TÁCTILES
+// GESTOS TÁCTILES CON PROTECCIÓN ANTI-ZOOM
 // ================================
 let touchStartX = 0;
 let touchEndX = 0;
+let touchStartY = 0;
+let touchEndY = 0;
 
+
+// 👆 DETECTAR INICIO DE TOQUE
 book.addEventListener("touchstart", e => {
-    touchStartX = e.changedTouches[0].screenX;
-});
-
-book.addEventListener("touchend", e => {
-    touchEndX = e.changedTouches[0].screenX;
-    const diff = touchStartX - touchEndX;
-    if (Math.abs(diff) > 60) {
-        if (diff > 0) flipNext();
-        else flipPrev();
+    initialTouches = e.touches.length;
+    
+    // Si hay 2 o más dedos, es zoom
+    if (e.touches.length >= 2) {
+        isZooming = true;
+        touchStartDistance = getDistance(e.touches[0], e.touches[1]);
+        console.log("🔍 ZOOM DETECTADO - Cambio de página bloqueado");
+        return;
     }
-});
+    
+    // Si es 1 dedo, guardar posición
+    isZooming = false;
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+}, { passive: true });
+
+
+// 👉 DETECTAR MOVIMIENTO
+book.addEventListener("touchmove", e => {
+    // Si hay 2 o más dedos, confirmar que es zoom
+    if (e.touches.length >= 2) {
+        isZooming = true;
+        
+        // Calcular si la distancia entre dedos cambia (zoom confirmado)
+        const currentDistance = getDistance(e.touches[0], e.touches[1]);
+        const distanceDiff = Math.abs(currentDistance - touchStartDistance);
+        
+        if (distanceDiff > 10) {
+            console.log("✅ ZOOM CONFIRMADO - Distancia:", distanceDiff.toFixed(0) + "px");
+        }
+    }
+}, { passive: true });
+
+
+// 👆 DETECTAR FIN DE TOQUE
+book.addEventListener("touchend", e => {
+    // Si se estaba haciendo zoom, NO cambiar de página
+    if (isZooming || initialTouches >= 2) {
+        console.log("⚠️ Zoom finalizado - NO se cambia de página");
+        
+        // Resetear después de un breve delay
+        setTimeout(() => {
+            isZooming = false;
+            initialTouches = 0;
+            touchStartDistance = 0;
+        }, 300);
+        
+        return;
+    }
+    
+    // Si fue un toque de 1 dedo, procesar swipe
+    touchEndX = e.changedTouches[0].screenX;
+    touchEndY = e.changedTouches[0].screenY;
+    
+    const diffX = touchStartX - touchEndX;
+    const diffY = touchStartY - touchEndY;
+    
+    // Verificar que sea un movimiento más horizontal que vertical
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 60) {
+        console.log("👉 SWIPE DETECTADO - Cambiando página");
+        
+        if (diffX > 0) {
+            flipNext(); // Swipe izquierda → siguiente
+        } else {
+            flipPrev(); // Swipe derecha → anterior
+        }
+    }
+    
+    // Resetear
+    isZooming = false;
+    initialTouches = 0;
+}, { passive: true });
+
+
+// 🔒 DETECTAR CANCELACIÓN DE TOQUE (usuario levanta dedos de forma extraña)
+book.addEventListener("touchcancel", e => {
+    console.log("⚠️ Toque cancelado - Reseteando");
+    isZooming = false;
+    initialTouches = 0;
+    touchStartDistance = 0;
+}, { passive: true });
+
 
 // ================================
 // RESIZE

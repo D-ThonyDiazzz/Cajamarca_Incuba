@@ -1,13 +1,7 @@
-// ================================
-// CONFIGURACIÓN PDF.JS
-// ================================
 pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
 const PDF_PATH = "assets/pdfs/LIBRO.pdf";
 
-// ================================
-// 🔍 DEBUG CONSOLA - VERIFICACIÓN INICIAL
-// ================================
 console.log("═══════════════════════════════════════════");
 console.log("✅ Script cargado correctamente");
 console.log("📁 Ruta del PDF configurada:", PDF_PATH);
@@ -17,9 +11,6 @@ console.log("📱 User Agent:", navigator.userAgent);
 console.log("🖥️ Ancho de ventana:", window.innerWidth, "px");
 console.log("═══════════════════════════════════════════");
 
-// ================================
-// CONFIGURACIÓN DE VIDEOS
-// ================================
 const videoPagesConfig = [
     {
         page: 70,
@@ -32,57 +23,44 @@ const videoPagesConfig = [
 
 console.log("🎬 Videos configurados:", videoPagesConfig.length);
 
-// ================================
-// VARIABLES GLOBALES
-// ================================
 let pdfDoc = null;
 let totalPages = 0;
 let pageNum = 1;
 let isAnimating = false;
 let isMobile = false;
 
-// ✅ NUEVO - Variables anti-zoom
 let isZooming = false;
 let touchStartDistance = 0;
 let initialTouches = 0;
 
-// ================================
-// ELEMENTOS DEL DOM
-// ================================
 const book = document.getElementById("book");
 const flipper = document.getElementById("flipper");
 const loader = document.getElementById("loader");
 
-// Canvas
 const leftCanvas = document.getElementById("leftCanvas");
 const rightCanvas = document.getElementById("rightCanvas");
 const flipFrontCanvas = document.getElementById("flipFrontCanvas");
 const flipBackCanvas = document.getElementById("flipBackCanvas");
 
-// Capas de video
 const leftVideoLayer = document.getElementById("leftVideoLayer");
 const rightVideoLayer = document.getElementById("rightVideoLayer");
 const flipFrontVideoLayer = document.getElementById("flipFrontVideoLayer");
 const flipBackVideoLayer = document.getElementById("flipBackVideoLayer");
 
-// Números de página
 const leftNumEl = document.getElementById("leftPageNum");
 const rightNumEl = document.getElementById("rightPageNum");
 const flipFrontNumEl = document.getElementById("flipFrontNum");
 const flipBackNumEl = document.getElementById("flipBackNum");
 
-// Botones y controles
 const prevBtn = document.getElementById("prevBtn");
 const nextBtn = document.getElementById("nextBtn");
 const pageIndicator = document.getElementById("pageIndicator");
 const progressFill = document.getElementById("progressFill");
 
-// Móvil
 const mobilePrev = document.getElementById("mobilePrev");
 const mobileNext = document.getElementById("mobileNext");
 const mobilePageIndicator = document.getElementById("mobilePageIndicator");
 
-// 🔍 DEBUG - Verificar elementos DOM
 console.log("═══════════════════════════════════════════");
 console.log("🔍 VERIFICACIÓN DE ELEMENTOS DOM:");
 console.log("  ✓ book:", book ? "✅ Encontrado" : "❌ NO ENCONTRADO");
@@ -93,9 +71,6 @@ console.log("  ✓ prevBtn:", prevBtn ? "✅ Encontrado" : "❌ NO ENCONTRADO");
 console.log("  ✓ nextBtn:", nextBtn ? "✅ Encontrado" : "❌ NO ENCONTRADO");
 console.log("═══════════════════════════════════════════");
 
-// ================================
-// FUNCIONES DE VIDEO
-// ================================
 function getVideoConfigForPage(pageNumber) {
     return videoPagesConfig.find(v => v.page === pageNumber);
 }
@@ -125,13 +100,11 @@ function setVideoOnLayer(layerEl, pageNumber, canvasEl) {
         if (canvasEl) canvasEl.style.display = "block";
     }
 
-    // Badge
     const badge = document.createElement("div");
     badge.className = "video-badge";
     badge.innerHTML = '<i class="fas fa-video"></i> TESTIMONIO';
     layerEl.appendChild(badge);
 
-    // Contenedor principal
     const vidContainer = document.createElement("div");
     vidContainer.className = "video-container";
 
@@ -168,9 +141,6 @@ function setVideoOnLayer(layerEl, pageNumber, canvasEl) {
     layerEl.appendChild(vidContainer);
 }
 
-// ================================
-// RENDERIZADO DE PDF
-// ================================
 async function renderPage(pageNumber, canvas, videoLayer, numEl) {
     const ctx = canvas.getContext("2d");
 
@@ -208,18 +178,12 @@ async function renderPage(pageNumber, canvas, videoLayer, numEl) {
     }
 }
 
-// ================================
-// FUNCIÓN ANTI-ZOOM
-// ================================
 function getDistance(touch1, touch2) {
     const dx = touch1.screenX - touch2.screenX;
     const dy = touch1.screenY - touch2.screenY;
     return Math.sqrt(dx * dx + dy * dy);
 }
 
-// ================================
-// INICIALIZACIÓN
-// ================================
 async function init() {
     console.log("═══════════════════════════════════════════");
     console.log("🚀 INICIANDO CARGA DEL PDF...");
@@ -295,19 +259,10 @@ async function init() {
     }
 }
 
-// ================================
-// DETECTAR MÓVIL
-// ================================
 function checkMobile() {
     isMobile = window.innerWidth <= 768;
 }
 
-// ... (resto del código igual)
-
-
-// ================================
-// RENDERIZAR DOBLE PÁGINA
-// ================================
 async function renderSpreadState(currentLeft) {
     if (isMobile) {
         await renderPage(currentLeft, leftCanvas, leftVideoLayer, leftNumEl);
@@ -319,9 +274,6 @@ async function renderSpreadState(currentLeft) {
     }
 }
 
-// ================================
-// ANIMACIÓN FLIP SIGUIENTE
-// ================================
 async function flipNext() {
     if (isMobile) return mobileTurnPage(1);
     if (isAnimating || pageNum + 2 > totalPages + 1) return;
@@ -349,9 +301,6 @@ async function flipNext() {
     }, 1200);
 }
 
-// ================================
-// ANIMACIÓN FLIP ANTERIOR
-// ================================
 async function flipPrev() {
     if (isMobile) return mobileTurnPage(-1);
     if (isAnimating || pageNum <= 1) return;
@@ -381,9 +330,6 @@ async function flipPrev() {
     }, 1200);
 }
 
-// ================================
-// NAVEGACIÓN MÓVIL
-// ================================
 async function mobileTurnPage(direction) {
     if (isAnimating) return;
 
@@ -398,9 +344,6 @@ async function mobileTurnPage(direction) {
     updateControls();
 }
 
-// ================================
-// IR A PRIMERA PÁGINA
-// ================================
 async function goFirst() {
     if (isAnimating) return;
     pageNum = 1;
@@ -408,9 +351,6 @@ async function goFirst() {
     updateControls();
 }
 
-// ================================
-// IR A ÚLTIMA PÁGINA
-// ================================
 async function goLast() {
     if (isAnimating) return;
     const lastLeft = totalPages % 2 === 0 ? totalPages - 1 : totalPages;
@@ -419,9 +359,6 @@ async function goLast() {
     updateControls();
 }
 
-// ================================
-// IR A PÁGINA ESPECÍFICA
-// ================================
 async function goToPage(target) {
     if (isAnimating) return;
 
@@ -431,35 +368,29 @@ async function goToPage(target) {
         return;
     }
 
-    // Ajustar para vista doble página en escritorio
     if (!isMobile && target % 2 === 0) {
         target--;
     }
 
-    // Cambiar directamente SIN mostrar loader
     isAnimating = true;
     pageNum = target;
     await renderSpreadState(pageNum);
     isAnimating = false;
     updateControls();
 
-    // Limpiar input
     const input = document.getElementById("gotoPageInput");
     if (input) {
         input.value = "";
         input.blur();
     }
 
-    // Scroll suave al libro
+
     book.scrollIntoView({ 
         behavior: 'smooth', 
         block: 'center' 
     });
 }
 
-// ================================
-// ACTUALIZAR CONTROLES
-// ================================
 function updateControls() {
     const lastPage = isMobile ? pageNum : Math.min(pageNum + 1, totalPages);
 
@@ -497,9 +428,6 @@ function updateControls() {
     });
 }
 
-// ================================
-// GENERAR ÍNDICE
-// ================================
 function generateTOC() {
     const toc = document.getElementById("tableOfContents");
     if (!toc) return;
@@ -521,9 +449,6 @@ function generateTOC() {
     }
 }
 
-// ================================
-// GENERAR LISTA DE VIDEOS
-// ================================
 function generateVideoList() {
     const container = document.getElementById("videoPagesList");
     if (!container) return;
@@ -549,9 +474,6 @@ function generateVideoList() {
     });
 }
 
-// ================================
-// EVENT LISTENERS
-// ================================
 if (prevBtn) prevBtn.addEventListener("click", flipPrev);
 if (nextBtn) nextBtn.addEventListener("click", flipNext);
 if (mobilePrev) mobilePrev.addEventListener("click", flipPrev);
@@ -602,9 +524,6 @@ if (gotoInput) {
     });
 }
 
-// ================================
-// SIDEBAR
-// ================================
 const toggleMenu = document.getElementById("toggleMenu");
 const closeSidebarBtn = document.getElementById("closeSidebar");
 const sidebarOverlay = document.getElementById("sidebarOverlay");
@@ -624,41 +543,30 @@ if (toggleMenu) toggleMenu.addEventListener("click", toggleSidebar);
 if (closeSidebarBtn) closeSidebarBtn.addEventListener("click", closeSidebar);
 if (sidebarOverlay) sidebarOverlay.addEventListener("click", closeSidebar);
 
-// ================================
-// GESTOS TÁCTILES CON PROTECCIÓN ANTI-ZOOM
-// ================================
 let touchStartX = 0;
 let touchEndX = 0;
 let touchStartY = 0;
 let touchEndY = 0;
 
-
-// 👆 DETECTAR INICIO DE TOQUE
 book.addEventListener("touchstart", e => {
     initialTouches = e.touches.length;
-    
-    // Si hay 2 o más dedos, es zoom
+
     if (e.touches.length >= 2) {
         isZooming = true;
         touchStartDistance = getDistance(e.touches[0], e.touches[1]);
         console.log("🔍 ZOOM DETECTADO - Cambio de página bloqueado");
         return;
     }
-    
-    // Si es 1 dedo, guardar posición
     isZooming = false;
     touchStartX = e.changedTouches[0].screenX;
     touchStartY = e.changedTouches[0].screenY;
 }, { passive: true });
 
-
-// 👉 DETECTAR MOVIMIENTO
 book.addEventListener("touchmove", e => {
-    // Si hay 2 o más dedos, confirmar que es zoom
+
     if (e.touches.length >= 2) {
         isZooming = true;
-        
-        // Calcular si la distancia entre dedos cambia (zoom confirmado)
+
         const currentDistance = getDistance(e.touches[0], e.touches[1]);
         const distanceDiff = Math.abs(currentDistance - touchStartDistance);
         
@@ -669,13 +577,11 @@ book.addEventListener("touchmove", e => {
 }, { passive: true });
 
 
-// 👆 DETECTAR FIN DE TOQUE
 book.addEventListener("touchend", e => {
-    // Si se estaba haciendo zoom, NO cambiar de página
+
     if (isZooming || initialTouches >= 2) {
         console.log("⚠️ Zoom finalizado - NO se cambia de página");
-        
-        // Resetear después de un breve delay
+
         setTimeout(() => {
             isZooming = false;
             initialTouches = 0;
@@ -684,32 +590,28 @@ book.addEventListener("touchend", e => {
         
         return;
     }
-    
-    // Si fue un toque de 1 dedo, procesar swipe
+
     touchEndX = e.changedTouches[0].screenX;
     touchEndY = e.changedTouches[0].screenY;
     
     const diffX = touchStartX - touchEndX;
     const diffY = touchStartY - touchEndY;
     
-    // Verificar que sea un movimiento más horizontal que vertical
     if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 60) {
         console.log("👉 SWIPE DETECTADO - Cambiando página");
         
         if (diffX > 0) {
-            flipNext(); // Swipe izquierda → siguiente
+            flipNext(); 
         } else {
-            flipPrev(); // Swipe derecha → anterior
+            flipPrev(); 
         }
     }
     
-    // Resetear
+
     isZooming = false;
     initialTouches = 0;
 }, { passive: true });
 
-
-// 🔒 DETECTAR CANCELACIÓN DE TOQUE (usuario levanta dedos de forma extraña)
 book.addEventListener("touchcancel", e => {
     console.log("⚠️ Toque cancelado - Reseteando");
     isZooming = false;
@@ -717,10 +619,6 @@ book.addEventListener("touchcancel", e => {
     touchStartDistance = 0;
 }, { passive: true });
 
-
-// ================================
-// RESIZE
-// ================================
 let resizeTimeout;
 window.addEventListener("resize", () => {
     clearTimeout(resizeTimeout);
@@ -734,7 +632,4 @@ window.addEventListener("resize", () => {
     }, 300);
 });
 
-// ================================
-// INICIAR
-// ================================
 init();

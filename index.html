@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
+
 <body>
     <header class="book-header">
         <div class="header-glow"></div>
@@ -15,11 +17,52 @@
             <a href="https://camcajamarca.com.pe/cajamarca-incuba/" class="logo" target="_blank">
                 <img src="assets/images/logo/logo_caj_incuba.png" alt="Cajamarca Incuba">
             </a>
-            
-            <button class="menu-btn" id="toggleMenu" aria-label="Abrir índice">
-                <i class="fas fa-bars"></i>
-                <span>Índice</span>
-            </button>
+
+            <!-- Navegación principal -->
+            <nav class="header-nav">
+
+                <div class="goto-page-top">
+                    <span class="page-indicator" id="pageIndicator">
+                        <i class="fas fa-file-alt"></i> Cargando...
+                    </span>
+                    <div class="goto-page-container">
+                        <label for="gotoPageInput"><i class="fas fa-search"></i></label>
+                        <input type="number" id="gotoPageInput" class="goto-page-input" placeholder="Ir a..." min="1">
+                        <button id="gotoPageBtn" class="goto-page-btn" title="Ir a página">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- Select de videos -->
+                <div class="nav-select-group">
+                    <label for="videoSelect" class="nav-label">
+                        <i class="fas fa-video"></i> Videos
+                    </label>
+                    <select id="videoSelect" class="nav-select">
+                        <option value="">Ir a video...</option>
+                        <!-- Se llenará desde JavaScript -->
+                    </select>
+                </div>
+
+                <!-- Select de capítulos / secciones -->
+                <div class="nav-select-group">
+                    <label for="sectionSelect" class="nav-label">
+                        <i class="fas fa-list-ul"></i> Secciones
+                    </label>
+                    <select id="sectionSelect" class="nav-select">
+                        <option value="">Ir a sección...</option>
+                        <!-- Se llenará desde JavaScript -->
+                    </select>
+                </div>
+
+
+
+                <!-- Botón para abrir el índice lateral -->
+                <button class="menu-btn" id="toggleMenu" aria-label="Abrir índice">
+                    <i class="fas fa-bars"></i>
+                    <span>Índice</span>
+                </button>
+            </nav>
         </div>
     </header>
 
@@ -39,18 +82,7 @@
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <main class="book-container">
-        <div class="goto-page-top">
-            <span class="page-indicator" id="pageIndicator">
-                <i class="fas fa-file-alt"></i> Cargando...
-            </span>
-            <div class="goto-page-container">
-                <label for="gotoPageInput"><i class="fas fa-search"></i></label>
-                <input type="number" id="gotoPageInput" class="goto-page-input" placeholder="Ir a..." min="1">
-                <button id="gotoPageBtn" class="goto-page-btn" title="Ir a página">
-                    <i class="fas fa-arrow-right"></i>
-                </button>
-            </div>
-        </div>
+
 
         <div class="decoration-bg"></div>
 
@@ -145,4 +177,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>

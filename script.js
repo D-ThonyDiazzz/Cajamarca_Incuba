@@ -4,8 +4,6 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs
 
 const PDF_PATH = "assets/pdfs/LIBRO.pdf";
 
-
-
 console.log("═══════════════════════════════════════════");
 console.log("✅ Script cargado correctamente");
 console.log("📁 Ruta del PDF configurada:", PDF_PATH);
@@ -15,9 +13,6 @@ console.log("📱 User Agent:", navigator.userAgent);
 console.log("🖥️ Ancho de ventana:", window.innerWidth, "px");
 console.log("═══════════════════════════════════════════");
 
-
-
-// afterPage = después de qué página PDF se inserta la página de video
 const videoPagesConfig = [
     { afterPage: 65, videoId: "Fiq-YWi2yzw",  title: "Ecoacción",          autoplay: true },
     { afterPage: 66, videoId: "iXkLMzDr5h8",  title: "Clara Mía",          autoplay: true },
@@ -30,26 +25,25 @@ const videoPagesConfig = [
     { afterPage: 80, videoId: "o5E1ffeBdSk",  title: "HANDIN",             autoplay: true },
     { afterPage: 84, videoId: "UHhfQyrAnqM",  title: "BRIXSAN",             autoplay: true },
     { afterPage: 88, videoId: "6ZiEiVrfYrQ",  title: "Doña Gallina",       autoplay: true },
-    { afterPage: 90, videoId: "pc9R2JGTA_s",  title: "Cata's Boutique",    autoplay: true }
+    { afterPage: 90, videoId: "pc9R2JGTA_s",  title: "Cata's Boutique",    autoplay: true },
+    { afterPage: 101, videoId: "AYh6XMaVguc", title: "Ecosistema emprendedor sostenible",       autoplay: true },
 ];
-
-
 
 const sectionsConfig = [
     { title: "Portada",                                   page: 1  },
-    { title: "Introducción",                              page: 3  },
-    { title: "Historia de Cajamarca Incuba",              page: 5  },
-    { title: "Puertas de ingreso",                        page: 13 },
-    { title: "Diagnóstico actual",                        page: 31 },
-    { title: "Servicios brindados",                       page: 42 },
-    { title: "Sostenibilidad financiera",                 page: 50 },
-    { title: "Experiencia de emprender",                  page: 56 },
-    { title: "Casos de éxito",                            page: 70 },
-    { title: "Lecciones y propuestas",                    page: 83 }
+    { title: "Prólogo",                                   page: 8  },
+    { title: "Introducción",                              page: 11 },
+    { title: "Índice",                                    page: 12 },
+    { title: "Historia de Cajamarca Incuba",              page: 14 },
+    { title: "Puertas de ingreso",                        page: 21 },
+    { title: "Diagnóstico actual",                        page: 39 },
+    { title: "Compromiso en acción",                      page: 48 },
+    { title: "Sostenibilidad financiera",                 page: 58 },
+    { title: "Experiencia de emprender",                  page: 63 },
+    { title: "Casos de éxito",                            page: 76 },
+    { title: "Lecciones y propuestas",                    page: 94 },
+    { title: "Anexos",                                    page: 102}
 ];
-
-
-
 
 let pdfDoc         = null;
 let totalPages     = 0;
@@ -60,11 +54,8 @@ let isZooming      = false;
 let touchStartDistance = 0;
 let initialTouches     = 0;
 
-
-
 let pageMap      = [];
 let virtualTotal = 0;
-
 
 
 const book                = document.getElementById("book");

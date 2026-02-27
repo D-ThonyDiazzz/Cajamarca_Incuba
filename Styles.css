@@ -1,7 +1,7 @@
 :root {
   --primary-dark: #005f87;
   --primary-medium: #007aa6;
-  --primary-light: #00a3c4;
+  --primary-light: #1a5fb4;
   --accent-gold: #f4c300;
   --accent-cream: #f4f6f8;
   --bg-light: #eef5f9;
@@ -61,10 +61,6 @@ body {
   gap: 1.5rem; 
   position: relative;
 }
-
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   HEADER NAV â€” SELECTS DE VIDEO Y SECCIÃ“N
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 .header-nav {
   display: flex;
@@ -1785,7 +1781,7 @@ canvas {
   position: absolute;
   inset: 0;
   background-image: 
-    radial-gradient(ellipse at 30% 40%, rgba(0, 163, 196, 0.12) 0%, transparent 40%),
+    radial-gradient(ellipse at 30% 40%, rgba(10, 61, 143, 0.15) 0%, transparent 40%),
     radial-gradient(ellipse at 70% 60%, rgba(244, 195, 0, 0.12) 0%, transparent 40%),
     radial-gradient(ellipse at 50% 80%, rgba(0, 163, 196, 0.08) 0%, transparent 35%);
   pointer-events: none;
@@ -1827,12 +1823,12 @@ canvas {
 }
 
 .decoration-bg::before {
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, var(--primary-light) 0%, transparent 70%);
-  top: -150px;
-  left: -150px;
-  animation: float1 20s ease-in-out infinite;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, #0a3d8f 0%, #1a5fb4 40%, transparent 70%);
+    top: -150px;
+    left: -150px;
+    animation: float1 20s ease-in-out infinite;
 }
 
 .decoration-bg::after {

@@ -1,7 +1,5 @@
 pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
-
-
 const PDF_PATH = "assets/pdfs/LIBRO.pdf";
 
 console.log("═══════════════════════════════════════════");
@@ -379,8 +377,6 @@ async function flipNext() {
     }, 1200);
 }
 
-
-
 async function flipPrev() {
     if (isMobile) return mobileTurnPage(-1);
     if (isAnimating || pageNum <= 1) return;
@@ -420,8 +416,6 @@ async function flipPrev() {
     }, 1200);
 }
 
-
-
 async function mobileTurnPage(direction) {
     if (isAnimating) return;
     const targetPage = pageNum + direction;
@@ -434,8 +428,6 @@ async function mobileTurnPage(direction) {
     updateControls();
 }
 
-
-
 async function goFirst() {
     if (isAnimating) return;
     stopAllVideos();
@@ -444,8 +436,6 @@ async function goFirst() {
     updateControls();
 }
 
-
-
 async function goLast() {
     if (isAnimating) return;
     stopAllVideos();
@@ -453,8 +443,6 @@ async function goLast() {
     await renderSpreadState(pageNum);
     updateControls();
 }
-
-
 
 async function goToPage(target) {
     if (isAnimating) return;
@@ -474,8 +462,6 @@ async function goToPage(target) {
     if (input) { input.value = ""; input.blur(); }
     book.scrollIntoView({ behavior: "smooth", block: "center" });
 }
-
-
 
 function updateControls() {
     const leftEntry  = (pageNum >= 1 && pageNum <= virtualTotal) ? pageMap[pageNum - 1] : null;

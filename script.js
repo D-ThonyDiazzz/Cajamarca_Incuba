@@ -1,6 +1,10 @@
 pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
+
+
 const PDF_PATH = "assets/pdfs/LIBRO.pdf";
+
+
 
 console.log("═══════════════════════════════════════════");
 console.log("✅ Script cargado correctamente");
@@ -11,21 +15,25 @@ console.log("📱 User Agent:", navigator.userAgent);
 console.log("🖥️ Ancho de ventana:", window.innerWidth, "px");
 console.log("═══════════════════════════════════════════");
 
+
+
 // afterPage = después de qué página PDF se inserta la página de video
 const videoPagesConfig = [
-    { afterPage: 57, videoId: "Fiq-YWi2yzw",  title: "Ecoacción",          autoplay: true },
-    { afterPage: 59, videoId: "iXkLMzDr5h8",  title: "Clara Mía",          autoplay: true },
-    { afterPage: 60, videoId: "67ELIRWpA8A",  title: "CARNIFER BIOEXPORT", autoplay: true },
-    { afterPage: 61, videoId: "eFYCqwn4m6c",  title: "CONCALLUA",          autoplay: true },
-    { afterPage: 64, videoId: "qpFj0cF-cfQ",  title: "Fruturú",            autoplay: true },
-    { afterPage: 65, videoId: "dBlVl2ycyfw",  title: "MANDO",              autoplay: true },
-    { afterPage: 66, videoId: "EGQMTJQBnBs",  title: "Byte",               autoplay: true },
-    { afterPage: 67, videoId: "3ZJay045efg",  title: "Azul Sostenible",    autoplay: true },
-    { afterPage: 72, videoId: "o5E1ffeBdSk",  title: "HANDIN",             autoplay: true },
-    { afterPage: 75, videoId: "UHhfQyrAnqM",  title: "BRIXSAN",             autoplay: true },
-    { afterPage: 77, videoId: "6ZiEiVrfYrQ",  title: "Doña Gallina",       autoplay: true },
-    { afterPage: 79, videoId: "pc9R2JGTA_s",  title: "Cata's Boutique",    autoplay: true }
+    { afterPage: 65, videoId: "Fiq-YWi2yzw",  title: "Ecoacción",          autoplay: true },
+    { afterPage: 66, videoId: "iXkLMzDr5h8",  title: "Clara Mía",          autoplay: true },
+    { afterPage: 67, videoId: "67ELIRWpA8A",  title: "CARNIFER BIOEXPORT", autoplay: true },
+    { afterPage: 69, videoId: "eFYCqwn4m6c",  title: "CONCALLUA",          autoplay: true },
+    { afterPage: 71, videoId: "qpFj0cF-cfQ",  title: "Fruturú",            autoplay: true },
+    { afterPage: 72, videoId: "dBlVl2ycyfw",  title: "MANDO",              autoplay: true },
+    { afterPage: 73, videoId: "EGQMTJQBnBs",  title: "Byte",               autoplay: true },
+    { afterPage: 68, videoId: "3ZJay045efg",  title: "Azul Sostenible",    autoplay: true },
+    { afterPage: 80, videoId: "o5E1ffeBdSk",  title: "HANDIN",             autoplay: true },
+    { afterPage: 84, videoId: "UHhfQyrAnqM",  title: "BRIXSAN",             autoplay: true },
+    { afterPage: 88, videoId: "6ZiEiVrfYrQ",  title: "Doña Gallina",       autoplay: true },
+    { afterPage: 90, videoId: "pc9R2JGTA_s",  title: "Cata's Boutique",    autoplay: true }
 ];
+
+
 
 const sectionsConfig = [
     { title: "Portada",                                   page: 1  },
@@ -41,6 +49,8 @@ const sectionsConfig = [
 ];
 
 
+
+
 let pdfDoc         = null;
 let totalPages     = 0;
 let pageNum        = 1;
@@ -50,8 +60,12 @@ let isZooming      = false;
 let touchStartDistance = 0;
 let initialTouches     = 0;
 
+
+
 let pageMap      = [];
 let virtualTotal = 0;
+
+
 
 const book                = document.getElementById("book");
 const flipper             = document.getElementById("flipper");
@@ -78,6 +92,8 @@ const mobilePageIndicator = document.getElementById("mobilePageIndicator");
 const videoSelect         = document.getElementById("videoSelect");
 const sectionSelect       = document.getElementById("sectionSelect");
 
+
+
 console.log("═══════════════════════════════════════════");
 console.log("🔍 VERIFICACIÓN DE ELEMENTOS DOM:");
 console.log("  ✓ book:",        book        ? "✅ Encontrado" : "❌ NO ENCONTRADO");
@@ -88,15 +104,21 @@ console.log("  ✓ prevBtn:",     prevBtn     ? "✅ Encontrado" : "❌ NO ENCON
 console.log("  ✓ nextBtn:",     nextBtn     ? "✅ Encontrado" : "❌ NO ENCONTRADO");
 console.log("═══════════════════════════════════════════");
 
+
+
 // Inserta cada video DESPUÉS de su página PDF correspondiente
 function buildPageMap() {
     pageMap = [];
+
+
 
     const videoAfterMap = new Map();
     videoPagesConfig.forEach(v => {
         if (!videoAfterMap.has(v.afterPage)) videoAfterMap.set(v.afterPage, []);
         videoAfterMap.get(v.afterPage).push(v);
     });
+
+
 
     for (let p = 1; p <= totalPages; p++) {
         pageMap.push({ type: "pdf", pdfPage: p });
@@ -107,25 +129,35 @@ function buildPageMap() {
         }
     }
 
+
+
     virtualTotal = pageMap.length;
     console.log(`📚 Mapa construido: ${virtualTotal} posiciones (${totalPages} PDF + ${videoPagesConfig.length} video)`);
 }
+
+
 
 function pdfPageToVPos(pdfPage) {
     const idx = pageMap.findIndex(e => e.type === "pdf" && e.pdfPage === pdfPage);
     return idx === -1 ? 1 : idx + 1;
 }
 
+
+
 function getVideoVPos(title) {
     const idx = pageMap.findIndex(e => e.type === "video" && e.config.title === title);
     return idx === -1 ? -1 : idx + 1;
 }
+
+
 
 function getPositionLabel(pos) {
     if (pos < 1 || pos > virtualTotal) return "—";
     const e = pageMap[pos - 1];
     return e.type === "video" ? `📹 ${e.config.title}` : String(e.pdfPage);
 }
+
+
 
 function stopAllVideos() {
     document.querySelectorAll(".video-layer").forEach(layer => {
@@ -135,6 +167,8 @@ function stopAllVideos() {
     });
 }
 
+
+
 function clearFlipperLayers() {
     [flipFrontVideoLayer, flipBackVideoLayer].forEach(layer => {
         layer.innerHTML = "";
@@ -143,19 +177,27 @@ function clearFlipperLayers() {
     });
 }
 
+
+
 function setVideoPageOnLayer(layerEl, config, canvasEl) {
     layerEl.innerHTML = "";
     layerEl.className = "video-layer active replace-mode";
     layerEl.style.display = "flex";
     if (canvasEl) canvasEl.style.display = "none";
 
+
+
     const badge = document.createElement("div");
     badge.className = "video-badge";
     badge.innerHTML = '<i class="fas fa-video"></i> TESTIMONIO';
     layerEl.appendChild(badge);
 
+
+
     const vidContainer = document.createElement("div");
     vidContainer.className = "video-container";
+
+
 
     if (!config.videoId) {
         vidContainer.innerHTML = `
@@ -185,11 +227,17 @@ function setVideoPageOnLayer(layerEl, config, canvasEl) {
             </div>`;
     }
 
+
+
     layerEl.appendChild(vidContainer);
 }
 
+
+
 async function renderPage(position, canvas, videoLayer, numEl) {
     const ctx = canvas.getContext("2d");
+
+
 
     if (position < 1 || position > virtualTotal) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -203,7 +251,11 @@ async function renderPage(position, canvas, videoLayer, numEl) {
         return;
     }
 
+
+
     const entry = pageMap[position - 1];
+
+
 
     if (entry.type === "video") {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -211,6 +263,8 @@ async function renderPage(position, canvas, videoLayer, numEl) {
         if (videoLayer) setVideoPageOnLayer(videoLayer, entry.config, canvas);
         return;
     }
+
+
 
     canvas.style.display = "block";
     if (videoLayer) {
@@ -220,7 +274,11 @@ async function renderPage(position, canvas, videoLayer, numEl) {
     }
     if (numEl) numEl.innerText = entry.pdfPage;
 
+
+
     console.log(`📄 Renderizando PDF p.${entry.pdfPage} (posición virtual ${position})`);
+
+
 
     try {
         const page     = await pdfDoc.getPage(entry.pdfPage);
@@ -234,11 +292,15 @@ async function renderPage(position, canvas, videoLayer, numEl) {
     }
 }
 
+
+
 function getDistance(touch1, touch2) {
     const dx = touch1.screenX - touch2.screenX;
     const dy = touch1.screenY - touch2.screenY;
     return Math.sqrt(dx * dx + dy * dy);
 }
+
+
 
 async function init() {
     console.log("🚀 INICIANDO CARGA DEL PDF...");
@@ -247,20 +309,30 @@ async function init() {
         totalPages = pdfDoc.numPages;
         console.log("✅ PDF cargado - Total páginas PDF:", totalPages);
 
+
+
         buildPageMap();
+
+
 
         const gotoInput = document.getElementById("gotoPageInput");
         if (gotoInput) gotoInput.max = virtualTotal;
 
+
+
         checkMobile();
         await renderSpreadState(pageNum);
         setTimeout(() => loader.classList.add("hidden"), 500);
+
+
 
         updateControls();
         generateTOC();
         generateVideoList();
         populateVideoSelect();
         populateSectionSelect();
+
+
 
         console.log("🎉 INICIALIZACIÓN COMPLETA");
     } catch (error) {
@@ -270,9 +342,13 @@ async function init() {
     }
 }
 
+
+
 function checkMobile() {
     isMobile = window.innerWidth <= 768;
 }
+
+
 
 async function renderSpreadState(currentLeft) {
     if (isMobile) {
@@ -284,21 +360,31 @@ async function renderSpreadState(currentLeft) {
     }
 }
 
+
+
 async function flipNext() {
     if (isMobile) return mobileTurnPage(1);
     if (isAnimating || pageNum + 2 > virtualTotal + 1) return;
 
+
+
     isAnimating = true;
     stopAllVideos();
+
+
 
     await renderPage(pageNum + 1, flipFrontCanvas,    flipFrontVideoLayer, flipFrontNumEl);
     await renderPage(pageNum + 2, flipBackCanvas,     flipBackVideoLayer,  flipBackNumEl);
     await renderPage(pageNum + 3, rightCanvas,        rightVideoLayer,     rightNumEl);
 
+
+
     flipper.style.display = "block";
     flipper.classList.add("animating");
     void flipper.offsetWidth;
     flipper.classList.add("flip-next-anim");
+
+
 
     setTimeout(async () => {
         pageNum += 2;
@@ -311,23 +397,35 @@ async function flipNext() {
     }, 1200);
 }
 
+
+
 async function flipPrev() {
     if (isMobile) return mobileTurnPage(-1);
     if (isAnimating || pageNum <= 1) return;
 
+
+
     isAnimating = true;
     stopAllVideos();
 
+
+
     const targetLeft = pageNum - 2;
+
+
 
     await renderPage(pageNum,     flipBackCanvas,  flipBackVideoLayer,  flipBackNumEl);
     await renderPage(pageNum - 1, flipFrontCanvas, flipFrontVideoLayer, flipFrontNumEl);
     await renderPage(targetLeft,  leftCanvas,      leftVideoLayer,      leftNumEl);
 
+
+
     flipper.style.display = "block";
     flipper.classList.add("animating");
     void flipper.offsetWidth;
     flipper.classList.add("flip-prev-anim");
+
+
 
     setTimeout(async () => {
         pageNum -= 2;
@@ -339,6 +437,8 @@ async function flipPrev() {
         updateControls();
     }, 1200);
 }
+
+
 
 async function mobileTurnPage(direction) {
     if (isAnimating) return;
@@ -352,6 +452,8 @@ async function mobileTurnPage(direction) {
     updateControls();
 }
 
+
+
 async function goFirst() {
     if (isAnimating) return;
     stopAllVideos();
@@ -360,6 +462,8 @@ async function goFirst() {
     updateControls();
 }
 
+
+
 async function goLast() {
     if (isAnimating) return;
     stopAllVideos();
@@ -367,6 +471,8 @@ async function goLast() {
     await renderSpreadState(pageNum);
     updateControls();
 }
+
+
 
 async function goToPage(target) {
     if (isAnimating) return;
@@ -387,13 +493,19 @@ async function goToPage(target) {
     book.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
+
+
 function updateControls() {
     const leftLabel  = getPositionLabel(pageNum);
     const rightLabel = getPositionLabel(pageNum + 1);
 
+
+
     pageIndicator.innerHTML = `<i class="fas fa-book"></i> ${
         isMobile ? leftLabel : `${leftLabel} · ${rightLabel}`
     }`;
+
+
 
     if (isMobile) {
         if (mobilePrev) mobilePrev.disabled = pageNum <= 1;
@@ -404,6 +516,8 @@ function updateControls() {
         nextBtn.disabled = pageNum + 1 >= virtualTotal;
     }
 
+
+
     if (progressFill) {
         const progress = isMobile
             ? (pageNum / virtualTotal) * 100
@@ -411,23 +525,33 @@ function updateControls() {
         progressFill.style.width = `${progress}%`;
     }
 
+
+
     document.querySelectorAll(".toc-item").forEach(item => {
         item.classList.toggle("active", parseInt(item.dataset.leftPage, 10) === pageNum);
     });
 }
+
+
 
 function generateTOC() {
     const toc = document.getElementById("tableOfContents");
     if (!toc) return;
     toc.innerHTML = "";
 
+
+
     for (let pos = 1; pos <= virtualTotal; pos += 2) {
         const leftEntry  = pageMap[pos - 1];
         const rightEntry = pageMap[pos] || null;
 
+
+
         const item = document.createElement("div");
         item.className = "toc-item";
         item.dataset.leftPage = pos;
+
+
 
         const leftLabel = leftEntry.type === "video"
             ? `<i class="fas fa-play-circle"></i> ${leftEntry.config.title}`
@@ -436,6 +560,8 @@ function generateTOC() {
             ? (rightEntry.type === "video" ? `📹 ${rightEntry.config.title}` : String(rightEntry.pdfPage))
             : "";
 
+
+
         item.innerHTML = `
             <span class="toc-title">${leftLabel}</span>
             <span class="toc-page">${rightLabel}</span>`;
@@ -443,6 +569,8 @@ function generateTOC() {
         toc.appendChild(item);
     }
 }
+
+
 
 function generateVideoList() {
     const container = document.getElementById("videoPagesList");
@@ -466,6 +594,8 @@ function generateVideoList() {
     });
 }
 
+
+
 function populateVideoSelect() {
     if (!videoSelect) return;
     videoSelect.innerHTML = '<option value="">Ir a video...</option>';
@@ -479,6 +609,8 @@ function populateVideoSelect() {
     });
 }
 
+
+
 function populateSectionSelect() {
     if (!sectionSelect) return;
     sectionSelect.innerHTML = '<option value="">Ir a sección...</option>';
@@ -491,10 +623,14 @@ function populateSectionSelect() {
     });
 }
 
+
+
 if (prevBtn)    prevBtn.addEventListener("click", flipPrev);
 if (nextBtn)    nextBtn.addEventListener("click", flipNext);
 if (mobilePrev) mobilePrev.addEventListener("click", flipPrev);
 if (mobileNext) mobileNext.addEventListener("click", flipNext);
+
+
 
 if (videoSelect) {
     videoSelect.addEventListener("change", async () => {
@@ -506,6 +642,8 @@ if (videoSelect) {
     });
 }
 
+
+
 if (sectionSelect) {
     sectionSelect.addEventListener("change", async () => {
         if (!sectionSelect.value) return;
@@ -515,6 +653,8 @@ if (sectionSelect) {
         sectionSelect.value = "";
     });
 }
+
+
 
 document.addEventListener("keydown", e => {
     const gotoInput = document.getElementById("gotoPageInput");
@@ -526,14 +666,20 @@ document.addEventListener("keydown", e => {
     else if (e.key === "Escape") { closeSidebar(); }
 });
 
+
+
 const gotoInput = document.getElementById("gotoPageInput");
 const gotoBtn   = document.getElementById("gotoPageBtn");
+
+
 
 if (gotoBtn) {
     gotoBtn.addEventListener("click", () => {
         if (gotoInput.value) goToPage(gotoInput.value);
     });
 }
+
+
 
 if (gotoInput) {
     gotoInput.addEventListener("keypress", e => {
@@ -544,26 +690,38 @@ if (gotoInput) {
     });
 }
 
+
+
 const toggleMenu      = document.getElementById("toggleMenu");
 const closeSidebarBtn = document.getElementById("closeSidebar");
 const sidebarOverlay  = document.getElementById("sidebarOverlay");
 const sidebar         = document.getElementById("sidebar");
+
+
 
 function toggleSidebar() {
     sidebar.classList.toggle("active");
     sidebarOverlay.classList.toggle("active");
 }
 
+
+
 function closeSidebar() {
     sidebar.classList.remove("active");
     sidebarOverlay.classList.remove("active");
 }
 
+
+
 if (toggleMenu)      toggleMenu.addEventListener("click", toggleSidebar);
 if (closeSidebarBtn) closeSidebarBtn.addEventListener("click", closeSidebar);
 if (sidebarOverlay)  sidebarOverlay.addEventListener("click", closeSidebar);
 
+
+
 let touchStartX = 0, touchEndX = 0, touchStartY = 0, touchEndY = 0;
+
+
 
 book.addEventListener("touchstart", e => {
     initialTouches = e.touches.length;
@@ -577,9 +735,13 @@ book.addEventListener("touchstart", e => {
     touchStartY = e.changedTouches[0].screenY;
 }, { passive: true });
 
+
+
 book.addEventListener("touchmove", e => {
     if (e.touches.length >= 2) isZooming = true;
 }, { passive: true });
+
+
 
 book.addEventListener("touchend", e => {
     if (isZooming || initialTouches >= 2) {
@@ -597,6 +759,8 @@ book.addEventListener("touchend", e => {
     initialTouches = 0;
 }, { passive: true });
 
+
+
 book.addEventListener("touchcancel", () => {
     isZooming = false; initialTouches = 0; touchStartDistance = 0;
 }, { passive: true });
@@ -611,5 +775,4 @@ window.addEventListener("resize", () => {
         if (!isAnimating) renderSpreadState(pageNum);
     }, 300);
 });
-
 init();

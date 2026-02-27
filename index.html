@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 
+
 <body>
     <header class="book-header">
         <div class="header-glow"></div>
@@ -18,8 +20,10 @@
                 <img src="assets/images/logo/logo_caj_incuba.png" alt="Cajamarca Incuba">
             </a>
 
+
             <!-- Navegación principal -->
             <nav class="header-nav">
+
 
                 <div class="goto-page-top">
                     <span class="page-indicator" id="pageIndicator">
@@ -44,6 +48,7 @@
                     </select>
                 </div>
 
+
                 <!-- Select de capítulos / secciones -->
                 <div class="nav-select-group">
                     <label for="sectionSelect" class="nav-label">
@@ -57,6 +62,7 @@
 
 
 
+
                 <!-- Botón para abrir el índice lateral -->
                 <button class="menu-btn" id="toggleMenu" aria-label="Abrir índice">
                     <i class="fas fa-bars"></i>
@@ -65,6 +71,7 @@
             </nav>
         </div>
     </header>
+
 
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
@@ -81,10 +88,13 @@
     </aside>
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
+
     <main class="book-container">
 
 
+
         <div class="decoration-bg"></div>
+
 
         <!-- Partículas flotantes -->
         <div class="floating-particles">
@@ -98,9 +108,11 @@
             <span class="particle"></span>
         </div>
 
+
         <button class="nav-arrow left-arrow" id="prevBtn" aria-label="Página anterior">
             <i class="fas fa-chevron-left"></i>
         </button>
+
 
         <div class="book-3d" id="book">
             <div class="page left-static">
@@ -112,6 +124,7 @@
                 </div>
             </div>
 
+
             <div class="page right-static">
                 <div class="page-content">
                     <canvas id="rightCanvas"></canvas>
@@ -120,6 +133,7 @@
                     <div class="shadow-overlay-right"></div>
                 </div>
             </div>
+
 
             <div class="page flipper" id="flipper">
                 <div class="flipper-face front">
@@ -140,12 +154,15 @@
                 </div>
             </div>
 
+
             <div class="spine"></div>
         </div>
+
 
         <button class="nav-arrow right-arrow" id="nextBtn" aria-label="Página siguiente">
             <i class="fas fa-chevron-right"></i>
         </button>
+
 
         <div class="mobile-nav" id="mobileNav">
             <button class="mobile-nav-btn" id="mobilePrev">
@@ -158,9 +175,11 @@
         </div>
     </main>
 
+
     <div class="progress-bar-fixed">
         <div class="progress-fill" id="progressFill"></div>
     </div>
+
 
     <div class="book-loader" id="loader">
         <div class="loader-content">
@@ -175,7 +194,9 @@
         </div>
     </div>
 
+
     <script src="script.js"></script>
 </body>
+
 
 </html>

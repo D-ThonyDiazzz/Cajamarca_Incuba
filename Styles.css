@@ -62,9 +62,9 @@ body {
   position: relative;
 }
 
-/* ═══════════════════════════════════════════════
-   HEADER NAV — SELECTS DE VIDEO Y SECCIÓN
-═══════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   HEADER NAV â€” SELECTS DE VIDEO Y SECCIÃ“N
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 .header-nav {
   display: flex;
@@ -136,10 +136,10 @@ body {
 }
 
 
-/* ═══════════════════════════════════════════════
-   HEADER NAV — RESPONSIVE MÓVIL
-   Segunda fila debajo del logo/título
-═══════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   HEADER NAV â€” RESPONSIVE MÃ“VIL
+   Segunda fila debajo del logo/tÃ­tulo
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 @media (max-width: 768px) {
   /* El header-container ahora permite segunda fila */
@@ -151,7 +151,7 @@ body {
     align-items: center;
   }
 
-  /* Orden explícito: fila 1 = logo + título + menú */
+  /* Orden explÃ­cito: fila 1 = logo + tÃ­tulo + menÃº */
   .logo              { order: 1; flex: 0 0 auto; }
   .book-title-header { order: 2; flex: 1; min-width: 0; }
   .menu-btn          { order: 3; flex: 0 0 auto; }
@@ -174,7 +174,7 @@ body {
     gap: 0;
   }
 
-  /* Ocultar etiquetas en móvil — el placeholder hace de label */
+  /* Ocultar etiquetas en mÃ³vil â€” el placeholder hace de label */
   .nav-label {
     display: none;
   }
@@ -2020,9 +2020,6 @@ canvas {
   }
 }
 
-/* ═══════════════════════════════════════════════════════════
-   GOTO-PAGE-TOP — Estilos base compartidos
-═══════════════════════════════════════════════════════════ */
 
 .goto-page-top {
   display: flex;
@@ -2031,7 +2028,6 @@ canvas {
   background: rgba(255, 255, 255, 0.96);
   padding: 0.52rem 1.3rem;
   border-radius: 50px;
-  /* Borde dorado para diferenciarlo visualmente de los selects oscuros */
   border: 2px solid rgba(244, 195, 0, 0.50);
   box-shadow: 
     0 4px 18px rgba(0, 0, 0, 0.14),
@@ -2131,13 +2127,7 @@ canvas {
 
 .goto-page-btn:active { transform: scale(0.95); }
 
-
-/* ═══════════════════════════════════════════════════════════
-   DESKTOP (≥ 769px): centrado absolutamente en el header
-═══════════════════════════════════════════════════════════ */
-
 @media (min-width: 769px) {
-  /* El contenedor padre necesita ser relative para el hijo absolute */
   .header-container {
     position: relative;
   }
@@ -2147,7 +2137,6 @@ canvas {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    /* z-index encima del glow pero debajo del sidebar */
     z-index: 15;
   }
 
@@ -2156,11 +2145,6 @@ canvas {
     padding-top: 2rem;
   }
 }
-
-
-/* ═══════════════════════════════════════════════════════════
-   MÓVIL (≤ 768px): fijo debajo del header, estilo compacto
-═══════════════════════════════════════════════════════════ */
 
 @media (max-width: 768px) {
   .goto-page-top {

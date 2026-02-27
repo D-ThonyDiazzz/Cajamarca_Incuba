@@ -2124,22 +2124,26 @@ canvas {
 .goto-page-btn:active { transform: scale(0.95); }
 
 @media (min-width: 769px) {
-  .header-container {
-    position: relative;
-  }
-
-  .goto-page-top {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 15;
-  }
-
-  .book-container {
-    margin-top: 75px;
-    padding-top: 2rem;
-  }
+    .header-container {
+        position: relative;
+    }
+    .goto-page-top {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 15;
+        width: max-content;
+        max-width: 280px;
+        flex-shrink: 0;
+    }
+    .goto-page-top .page-indicator {
+        max-width: 110px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: inline-flex;
+    }
 }
 
 @media (max-width: 768px) {

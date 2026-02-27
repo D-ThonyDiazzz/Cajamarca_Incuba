@@ -10,8 +10,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
-
-
 <body>
     <header class="book-header">
         <div class="header-glow"></div>
@@ -19,12 +17,7 @@
             <a href="https://camcajamarca.com.pe/cajamarca-incuba/" class="logo" target="_blank">
                 <img src="assets/images/logo/logo_caj_incuba.png" alt="Cajamarca Incuba">
             </a>
-
-
-            <!-- Navegación principal -->
             <nav class="header-nav">
-
-
                 <div class="goto-page-top">
                     <span class="page-indicator" id="pageIndicator">
                         <i class="fas fa-file-alt"></i> Cargando...
@@ -37,33 +30,23 @@
                         </button>
                     </div>
                 </div>
-                <!-- Select de videos -->
                 <div class="nav-select-group">
                     <label for="videoSelect" class="nav-label">
                         <i class="fas fa-video"></i> Videos
                     </label>
                     <select id="videoSelect" class="nav-select">
                         <option value="">Ir a video...</option>
-                        <!-- Se llenará desde JavaScript -->
                     </select>
                 </div>
-
-
-                <!-- Select de capítulos / secciones -->
                 <div class="nav-select-group">
                     <label for="sectionSelect" class="nav-label">
                         <i class="fas fa-list-ul"></i> Secciones
                     </label>
                     <select id="sectionSelect" class="nav-select">
                         <option value="">Ir a sección...</option>
-                        <!-- Se llenará desde JavaScript -->
+
                     </select>
                 </div>
-
-
-
-
-                <!-- Botón para abrir el índice lateral -->
                 <button class="menu-btn" id="toggleMenu" aria-label="Abrir índice">
                     <i class="fas fa-bars"></i>
                     <span>Índice</span>
@@ -90,13 +73,7 @@
 
 
     <main class="book-container">
-
-
-
         <div class="decoration-bg"></div>
-
-
-        <!-- Partículas flotantes -->
         <div class="floating-particles">
             <span class="particle"></span>
             <span class="particle"></span>
@@ -107,13 +84,9 @@
             <span class="particle"></span>
             <span class="particle"></span>
         </div>
-
-
         <button class="nav-arrow left-arrow" id="prevBtn" aria-label="Página anterior">
             <i class="fas fa-chevron-left"></i>
         </button>
-
-
         <div class="book-3d" id="book">
             <div class="page left-static">
                 <div class="page-content">
@@ -123,8 +96,6 @@
                     <div class="shadow-overlay-left"></div>
                 </div>
             </div>
-
-
             <div class="page right-static">
                 <div class="page-content">
                     <canvas id="rightCanvas"></canvas>
@@ -133,8 +104,6 @@
                     <div class="shadow-overlay-right"></div>
                 </div>
             </div>
-
-
             <div class="page flipper" id="flipper">
                 <div class="flipper-face front">
                     <div class="page-content">
@@ -157,13 +126,9 @@
 
             <div class="spine"></div>
         </div>
-
-
         <button class="nav-arrow right-arrow" id="nextBtn" aria-label="Página siguiente">
             <i class="fas fa-chevron-right"></i>
         </button>
-
-
         <div class="mobile-nav" id="mobileNav">
             <button class="mobile-nav-btn" id="mobilePrev">
                 <i class="fas fa-chevron-left"></i> Anterior
@@ -174,13 +139,9 @@
             </button>
         </div>
     </main>
-
-
     <div class="progress-bar-fixed">
         <div class="progress-fill" id="progressFill"></div>
     </div>
-
-
     <div class="book-loader" id="loader">
         <div class="loader-content">
             <div class="loader-icon">
@@ -193,10 +154,6 @@
             </div>
         </div>
     </div>
-
-
     <script src="script.js"></script>
 </body>
-
-
 </html>

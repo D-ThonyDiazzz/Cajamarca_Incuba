@@ -5,12 +5,12 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs
 const PDF_PATH = "assets/pdfs/LIBRO.pdf";
 
 console.log("═══════════════════════════════════════════");
-console.log("✅ Script cargado correctamente");
-console.log("📁 Ruta del PDF configurada:", PDF_PATH);
-console.log("🔧 PDF.js Worker URL:", pdfjsLib.GlobalWorkerOptions.workerSrc);
-console.log("🌐 PDF.js versión:", pdfjsLib.version || "No disponible");
-console.log("📱 User Agent:", navigator.userAgent);
-console.log("🖥️ Ancho de ventana:", window.innerWidth, "px");
+console.log("Script cargado correctamente");
+console.log("Ruta del PDF configurada:", PDF_PATH);
+console.log("PDF.js Worker URL:", pdfjsLib.GlobalWorkerOptions.workerSrc);
+console.log("PDF.js versión:", pdfjsLib.version || "No disponible");
+console.log("User Agent:", navigator.userAgent);
+console.log("Ancho de ventana:", window.innerWidth, "px");
 console.log("═══════════════════════════════════════════");
 
 const videoPagesConfig = [
@@ -26,7 +26,7 @@ const videoPagesConfig = [
     { afterPage: 84, videoId: "UHhfQyrAnqM",  title: "BRIXSAN",             autoplay: true },
     { afterPage: 88, videoId: "6ZiEiVrfYrQ",  title: "Doña Gallina",       autoplay: true },
     { afterPage: 90, videoId: "pc9R2JGTA_s",  title: "Cata's Boutique",    autoplay: true },
-    { afterPage: 101, videoId: "AYh6XMaVguc", title: "Ecosistema emprendedor sostenible",       autoplay: true },
+    { afterPage: 101, videoId: "AYh6XMaVguc", title: "Ecosistema emprendedor sostenible",       autoplay: true }
 ];
 
 const sectionsConfig = [
@@ -175,15 +175,6 @@ function setVideoPageOnLayer(layerEl, config, canvasEl) {
     layerEl.className = "video-layer active replace-mode";
     layerEl.style.display = "flex";
     if (canvasEl) canvasEl.style.display = "none";
-
-
-
-    const badge = document.createElement("div");
-    badge.className = "video-badge";
-    badge.innerHTML = '<i class="fas fa-video"></i> TESTIMONIO';
-    layerEl.appendChild(badge);
-
-
 
     const vidContainer = document.createElement("div");
     vidContainer.className = "video-container";
@@ -487,14 +478,18 @@ async function goToPage(target) {
 
 
 function updateControls() {
-    const leftLabel  = getPositionLabel(pageNum);
-    const rightLabel = getPositionLabel(pageNum + 1);
+    const leftEntry  = (pageNum >= 1 && pageNum <= virtualTotal) ? pageMap[pageNum - 1] : null;
+const rightEntry = (pageNum + 1 <= virtualTotal) ? pageMap[pageNum] : null;
 
+const leftLabel  = leftEntry  ? (leftEntry.type  === "video" ? `▶ ${leftEntry.config.title}`  : leftEntry.pdfPage)  : "—";
+const rightLabel = rightEntry ? (rightEntry.type === "video" ? `▶ ${rightEntry.config.title}` : rightEntry.pdfPage) : "—";
+const leftNum  = leftEntry  ? (leftEntry.type  === "video" ? "▶" : leftEntry.pdfPage)  : "—";
+const rightNum = rightEntry ? (rightEntry.type === "video" ? "▶" : rightEntry.pdfPage) : "—";
 
+pageIndicator.innerHTML = `<i class="fas fa-book"></i> ${
+    isMobile ? leftNum : `${leftNum} · ${rightNum}`
+}`;
 
-    pageIndicator.innerHTML = `<i class="fas fa-book"></i> ${
-        isMobile ? leftLabel : `${leftLabel} · ${rightLabel}`
-    }`;
 
 
 

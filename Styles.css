@@ -2183,3 +2183,10 @@ canvas {
 .video-badge {
     display: none !important;
 }
+
+@media (min-width: 769px) {
+    .book-container {
+        margin-top: 90px;
+        padding-top: 1.5rem;
+    }
+}

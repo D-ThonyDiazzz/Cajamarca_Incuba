@@ -44,7 +44,6 @@ const sectionsConfig = [
     { title: "Anexos",                        page: 104 }
 ];
 
-//índice
 const tocConfig = [
     { title: "Portada",                                   page: 1,   level: "titulo" },
     { title: "Aliados estratégicos",                      page: 6,   level: "titulo" },
@@ -128,7 +127,6 @@ let initialTouches     = 0;
 let pageMap      = [];
 let virtualTotal = 0;
 
-
 const book                = document.getElementById("book");
 const flipper             = document.getElementById("flipper");
 const loader              = document.getElementById("loader");
@@ -154,33 +152,14 @@ const mobilePageIndicator = document.getElementById("mobilePageIndicator");
 const videoSelect         = document.getElementById("videoSelect");
 const sectionSelect       = document.getElementById("sectionSelect");
 
-
-
-console.log("═══════════════════════════════════════════");
-console.log("🔍 VERIFICACIÓN DE ELEMENTOS DOM:");
-console.log("  ✓ book:",        book        ? "✅ Encontrado" : "❌ NO ENCONTRADO");
-console.log("  ✓ loader:",      loader      ? "✅ Encontrado" : "❌ NO ENCONTRADO");
-console.log("  ✓ leftCanvas:",  leftCanvas  ? "✅ Encontrado" : "❌ NO ENCONTRADO");
-console.log("  ✓ rightCanvas:", rightCanvas ? "✅ Encontrado" : "❌ NO ENCONTRADO");
-console.log("  ✓ prevBtn:",     prevBtn     ? "✅ Encontrado" : "❌ NO ENCONTRADO");
-console.log("  ✓ nextBtn:",     nextBtn     ? "✅ Encontrado" : "❌ NO ENCONTRADO");
-console.log("═══════════════════════════════════════════");
-
-
-
-// Inserta cada video DESPUÉS de su página PDF correspondiente
 function buildPageMap() {
     pageMap = [];
-
-
 
     const videoAfterMap = new Map();
     videoPagesConfig.forEach(v => {
         if (!videoAfterMap.has(v.afterPage)) videoAfterMap.set(v.afterPage, []);
         videoAfterMap.get(v.afterPage).push(v);
     });
-
-
 
     for (let p = 1; p <= totalPages; p++) {
         pageMap.push({ type: "pdf", pdfPage: p });
@@ -191,35 +170,25 @@ function buildPageMap() {
         }
     }
 
-
-
     virtualTotal = pageMap.length;
     console.log(`📚 Mapa construido: ${virtualTotal} posiciones (${totalPages} PDF + ${videoPagesConfig.length} video)`);
 }
-
-
 
 function pdfPageToVPos(pdfPage) {
     const idx = pageMap.findIndex(e => e.type === "pdf" && e.pdfPage === pdfPage);
     return idx === -1 ? 1 : idx + 1;
 }
 
-
-
 function getVideoVPos(title) {
     const idx = pageMap.findIndex(e => e.type === "video" && e.config.title === title);
     return idx === -1 ? -1 : idx + 1;
 }
-
-
 
 function getPositionLabel(pos) {
     if (pos < 1 || pos > virtualTotal) return "—";
     const e = pageMap[pos - 1];
     return e.type === "video" ? `📹 ${e.config.title}` : String(e.pdfPage);
 }
-
-
 
 function stopAllVideos() {
     document.querySelectorAll(".video-layer").forEach(layer => {
@@ -229,8 +198,6 @@ function stopAllVideos() {
     });
 }
 
-
-
 function clearFlipperLayers() {
     [flipFrontVideoLayer, flipBackVideoLayer].forEach(layer => {
         layer.innerHTML = "";
@@ -238,8 +205,6 @@ function clearFlipperLayers() {
         layer.className = "video-layer";
     });
 }
-
-
 
 function setVideoPageOnLayer(layerEl, config, canvasEl) {
     layerEl.innerHTML = "";
@@ -249,8 +214,6 @@ function setVideoPageOnLayer(layerEl, config, canvasEl) {
 
     const vidContainer = document.createElement("div");
     vidContainer.className = "video-container";
-
-
 
     if (!config.videoId) {
         vidContainer.innerHTML = `
@@ -279,18 +242,11 @@ function setVideoPageOnLayer(layerEl, config, canvasEl) {
                 ></iframe>
             </div>`;
     }
-
-
-
     layerEl.appendChild(vidContainer);
 }
 
-
-
 async function renderPage(position, canvas, videoLayer, numEl) {
     const ctx = canvas.getContext("2d");
-
-
 
     if (position < 1 || position > virtualTotal) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -304,11 +260,7 @@ async function renderPage(position, canvas, videoLayer, numEl) {
         return;
     }
 
-
-
     const entry = pageMap[position - 1];
-
-
 
     if (entry.type === "video") {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -316,8 +268,6 @@ async function renderPage(position, canvas, videoLayer, numEl) {
         if (videoLayer) setVideoPageOnLayer(videoLayer, entry.config, canvas);
         return;
     }
-
-
 
     canvas.style.display = "block";
     if (videoLayer) {
@@ -327,11 +277,7 @@ async function renderPage(position, canvas, videoLayer, numEl) {
     }
     if (numEl) numEl.innerText = entry.pdfPage;
 
-
-
     console.log(`📄 Renderizando PDF p.${entry.pdfPage} (posición virtual ${position})`);
-
-
 
     try {
         const page     = await pdfDoc.getPage(entry.pdfPage);
@@ -345,15 +291,11 @@ async function renderPage(position, canvas, videoLayer, numEl) {
     }
 }
 
-
-
 function getDistance(touch1, touch2) {
     const dx = touch1.screenX - touch2.screenX;
     const dy = touch1.screenY - touch2.screenY;
     return Math.sqrt(dx * dx + dy * dy);
 }
-
-
 
 async function init() {
     console.log("🚀 INICIANDO CARGA DEL PDF...");
@@ -362,30 +304,20 @@ async function init() {
         totalPages = pdfDoc.numPages;
         console.log("✅ PDF cargado - Total páginas PDF:", totalPages);
 
-
-
         buildPageMap();
-
-
 
         const gotoInput = document.getElementById("gotoPageInput");
         if (gotoInput) gotoInput.max = virtualTotal;
 
-
-
         checkMobile();
         await renderSpreadState(pageNum);
         setTimeout(() => loader.classList.add("hidden"), 500);
-
-
 
         updateControls();
         generateTOC();
         generateVideoList();
         populateVideoSelect();
         populateSectionSelect();
-
-
 
         console.log("🎉 INICIALIZACIÓN COMPLETA");
     } catch (error) {
@@ -395,13 +327,9 @@ async function init() {
     }
 }
 
-
-
 function checkMobile() {
     isMobile = window.innerWidth <= 768;
 }
-
-
 
 async function renderSpreadState(currentLeft) {
     if (isMobile) {
@@ -413,31 +341,21 @@ async function renderSpreadState(currentLeft) {
     }
 }
 
-
-
 async function flipNext() {
     if (isMobile) return mobileTurnPage(1);
     if (isAnimating || pageNum + 2 > virtualTotal + 1) return;
 
-
-
     isAnimating = true;
     stopAllVideos();
-
-
 
     await renderPage(pageNum + 1, flipFrontCanvas,    flipFrontVideoLayer, flipFrontNumEl);
     await renderPage(pageNum + 2, flipBackCanvas,     flipBackVideoLayer,  flipBackNumEl);
     await renderPage(pageNum + 3, rightCanvas,        rightVideoLayer,     rightNumEl);
 
-
-
     flipper.style.display = "block";
     flipper.classList.add("animating");
     void flipper.offsetWidth;
     flipper.classList.add("flip-next-anim");
-
-
 
     setTimeout(async () => {
         pageNum += 2;
@@ -454,29 +372,19 @@ async function flipPrev() {
     if (isMobile) return mobileTurnPage(-1);
     if (isAnimating || pageNum <= 1) return;
 
-
-
     isAnimating = true;
     stopAllVideos();
 
-
-
     const targetLeft = pageNum - 2;
-
-
 
     await renderPage(pageNum,     flipBackCanvas,  flipBackVideoLayer,  flipBackNumEl);
     await renderPage(pageNum - 1, flipFrontCanvas, flipFrontVideoLayer, flipFrontNumEl);
     await renderPage(targetLeft,  leftCanvas,      leftVideoLayer,      leftNumEl);
 
-
-
     flipper.style.display = "block";
     flipper.classList.add("animating");
     void flipper.offsetWidth;
     flipper.classList.add("flip-prev-anim");
-
-
 
     setTimeout(async () => {
         pageNum -= 2;
@@ -549,9 +457,6 @@ pageIndicator.innerHTML = `<i class="fas fa-book"></i> ${
     isMobile ? leftNum : `${leftNum} · ${rightNum}`
 }`;
 
-
-
-
     if (isMobile) {
         if (mobilePrev) mobilePrev.disabled = pageNum <= 1;
         if (mobileNext) mobileNext.disabled = pageNum >= virtualTotal;
@@ -561,8 +466,6 @@ pageIndicator.innerHTML = `<i class="fas fa-book"></i> ${
         nextBtn.disabled = pageNum + 1 >= virtualTotal;
     }
 
-
-
     if (progressFill) {
         const progress = isMobile
             ? (pageNum / virtualTotal) * 100
@@ -570,21 +473,16 @@ pageIndicator.innerHTML = `<i class="fas fa-book"></i> ${
         progressFill.style.width = `${progress}%`;
     }
 
-
-
     document.querySelectorAll(".toc-item").forEach(item => {
         item.classList.toggle("active", parseInt(item.dataset.leftPage, 10) === pageNum);
     });
 }
-
-
 
 function generateTOC() {
     const toc = document.getElementById("tableOfContents");
     if (!toc) return;
     toc.innerHTML = "";
 
-    // Índice 100% basado en tocConfig (manual e independiente)
     tocConfig.forEach(entry => {
         const vPos = pdfPageToVPos(entry.page);
         const targetPos = isMobile ? vPos : (vPos % 2 === 0 ? vPos - 1 : vPos);
@@ -602,33 +500,7 @@ function generateTOC() {
     });
 }
 
-
-
-function generateVideoList() {
- /*   
-    const container = document.getElementById("videoPagesList");
-    if (!container) return;
-    container.innerHTML = "";
-    if (videoPagesConfig.length === 0) {
-        container.innerHTML = '<p style="padding:0.5rem;color:var(--text-light);font-size:0.9rem;">No hay videos configurados</p>';
-        return;
-    }
-    videoPagesConfig.forEach(v => {
-        const vPos = getVideoVPos(v.title);
-        if (vPos < 1) return;
-        const btn = document.createElement("button");
-        btn.innerHTML = `<span>${v.title}</span><i class="fas fa-play-circle"></i>`;
-        btn.addEventListener("click", async () => {
-            const left = isMobile ? vPos : (vPos % 2 === 0 ? vPos - 1 : vPos);
-            await goToPage(left);
-            closeSidebar();
-        });
-        container.appendChild(btn);
-    });
-    */
-}
-
-
+function generateVideoList() {}
 
 function populateVideoSelect() {
     if (!videoSelect) return;
@@ -643,8 +515,6 @@ function populateVideoSelect() {
     });
 }
 
-
-
 function populateSectionSelect() {
     if (!sectionSelect) return;
     sectionSelect.innerHTML = '<option value="">Ir a sección...</option>';
@@ -657,14 +527,10 @@ function populateSectionSelect() {
     });
 }
 
-
-
 if (prevBtn)    prevBtn.addEventListener("click", flipPrev);
 if (nextBtn)    nextBtn.addEventListener("click", flipNext);
 if (mobilePrev) mobilePrev.addEventListener("click", flipPrev);
 if (mobileNext) mobileNext.addEventListener("click", flipNext);
-
-
 
 if (videoSelect) {
     videoSelect.addEventListener("change", async () => {
@@ -676,8 +542,6 @@ if (videoSelect) {
     });
 }
 
-
-
 if (sectionSelect) {
     sectionSelect.addEventListener("change", async () => {
         if (!sectionSelect.value) return;
@@ -687,8 +551,6 @@ if (sectionSelect) {
         sectionSelect.value = "";
     });
 }
-
-
 
 document.addEventListener("keydown", e => {
     const gotoInput = document.getElementById("gotoPageInput");
@@ -700,20 +562,14 @@ document.addEventListener("keydown", e => {
     else if (e.key === "Escape") { closeSidebar(); }
 });
 
-
-
 const gotoInput = document.getElementById("gotoPageInput");
 const gotoBtn   = document.getElementById("gotoPageBtn");
-
-
 
 if (gotoBtn) {
     gotoBtn.addEventListener("click", () => {
         if (gotoInput.value) goToPage(gotoInput.value);
     });
 }
-
-
 
 if (gotoInput) {
     gotoInput.addEventListener("keypress", e => {
@@ -724,38 +580,26 @@ if (gotoInput) {
     });
 }
 
-
-
 const toggleMenu      = document.getElementById("toggleMenu");
 const closeSidebarBtn = document.getElementById("closeSidebar");
 const sidebarOverlay  = document.getElementById("sidebarOverlay");
 const sidebar         = document.getElementById("sidebar");
-
-
 
 function toggleSidebar() {
     sidebar.classList.toggle("active");
     sidebarOverlay.classList.toggle("active");
 }
 
-
-
 function closeSidebar() {
     sidebar.classList.remove("active");
     sidebarOverlay.classList.remove("active");
 }
 
-
-
 if (toggleMenu)      toggleMenu.addEventListener("click", toggleSidebar);
 if (closeSidebarBtn) closeSidebarBtn.addEventListener("click", closeSidebar);
 if (sidebarOverlay)  sidebarOverlay.addEventListener("click", closeSidebar);
 
-
-
 let touchStartX = 0, touchEndX = 0, touchStartY = 0, touchEndY = 0;
-
-
 
 book.addEventListener("touchstart", e => {
     initialTouches = e.touches.length;
@@ -769,13 +613,9 @@ book.addEventListener("touchstart", e => {
     touchStartY = e.changedTouches[0].screenY;
 }, { passive: true });
 
-
-
 book.addEventListener("touchmove", e => {
     if (e.touches.length >= 2) isZooming = true;
 }, { passive: true });
-
-
 
 book.addEventListener("touchend", e => {
     if (isZooming || initialTouches >= 2) {
@@ -792,8 +632,6 @@ book.addEventListener("touchend", e => {
     isZooming = false;
     initialTouches = 0;
 }, { passive: true });
-
-
 
 book.addEventListener("touchcancel", () => {
     isZooming = false; initialTouches = 0; touchStartDistance = 0;

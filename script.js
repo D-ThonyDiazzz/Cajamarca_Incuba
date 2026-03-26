@@ -28,20 +28,92 @@ const videoPagesConfig = [
 ];
 
 const sectionsConfig = [
-    { title: "Portada",                                   page: 1  },
-    { title: "Prólogo ",                                  page: 8  },
-    { title: "Prólogo ",                                  page: 10 },
-    { title: "Introducción",                              page: 11 },
-    { title: "Índice",                                    page: 14 },
-    { title: "Historia de Cajamarca Incuba",              page: 16 },
-    { title: "Puertas de ingreso",                        page: 23 },
-    { title: "Diagnóstico actual",                        page: 41 },
-    { title: "Compromiso en acción",                      page: 50 },
-    { title: "Sostenibilidad financiera",                 page: 60 },
-    { title: "Experiencia de emprender",                  page: 65 },
-    { title: "Casos de éxito",                            page: 78 },
-    { title: "Lecciones y propuestas",                    page: 96 },
-    { title: "Anexos",                                    page: 104}
+    { title: "Portada",                       page: 1   },
+    { title: "Prólogo",                       page: 8   },
+    { title: "Prólogo",                       page: 10  },
+    { title: "Introducción",                  page: 11  },
+    { title: "Índice",                        page: 14  },
+    { title: "Historia de Cajamarca Incuba",  page: 16  },
+    { title: "Puertas de ingreso",            page: 23  },
+    { title: "Diagnóstico actual",            page: 41  },
+    { title: "Compromiso en acción",          page: 50  },
+    { title: "Sostenibilidad financiera",     page: 60  },
+    { title: "Experiencia de emprender",      page: 65  },
+    { title: "Casos de éxito",                page: 78  },
+    { title: "Lecciones y propuestas",        page: 96  },
+    { title: "Anexos",                        page: 104 }
+];
+
+//índice
+const tocConfig = [
+    { title: "Portada",                                   page: 1,   level: "titulo" },
+    { title: "Aliados estratégicos",                      page: 6,   level: "titulo" },
+    { title: "Prólogo",                                   page: 8,   level: "titulo" },
+    { title: "Prólogo",                                   page: 10,  level: "titulo" },
+    { title: "Introducción",                              page: 11,  level: "titulo" },
+    { title: "Índice",                                    page: 14,  level: "titulo" },
+    { title: "Historia de Cajamarca Incuba",              page: 16,  level: "titulo" },
+    { title: "Cajamarca, su realidad emprendedora y el inicio del camino",                  page: 19,  level: "subtitulo" },
+    { title: "El Nacimiento de Cajamarca Incuba",              page: 21,  level: "subtitulo" },
+    { title: "Puertas de ingreso",                        page: 23,  level: "titulo" },
+    { title: "Descripción de las cinco puertas de acceso a Cajamarca Incuba",              page: 25,  level: "subtitulo" },
+    { title: "Puerta 1: Idea de negocio en etapa temprana",              page: 26,  level: "subtitulo" },
+    { title: "Puerta 2: Negocios validos con prototipo o piloto comercial",              page: 27,  level: "subtitulo" },
+    { title: "Puerta 3: Empresas en marcha con potencial de escalamiento",              page: 28,  level: "subtitulo" },
+    { title: "Puerta 4: Inversionistas y actores con excedentes de capital",              page: 29,  level: "subtitulo" },
+    { title: "Puerta 5: Formación de mentores empresariales",              page: 30,  level: "subtitulo" },
+    { title: "Convocatorias: Un pulso constante con el talento",              page: 32,  level: "subtitulo" },
+    { title: "Diagnóstico de los emprendimientos",              page: 36,  level: "subtitulo" },
+    { title: "Diagnóstico actual",                        page: 41,  level: "titulo" },
+    { title: "Situación institucional: Naturaleza y rol de Cajamarca Incuba",              page: 42,  level: "subtitulo" },
+    { title: "Alcance institucional y ámbito de intervención: Nuestra huella en el territorio",              page: 43,  level: "subtitulo" },
+    { title: "Crónica de la innovación en Cajamarca, trayectoria escalonada en hitos",              page: 44,  level: "subtitulo" },
+    { title: "Talento humano que impulsa el desarrollo emprendedor",              page: 47,  level: "subtitulo" },
+    { title: "Compromiso en acción",                      page: 50,  level: "titulo" },
+    { title: "Preincubación: Ideación, validación temprana y construcción de modelo de negocio",              page: 51,  level: "subtitulo" },
+    { title: "Incubación: Acompañamiento técnico y empresarial",              page: 53,  level: "subtitulo" },
+    { title: "Aceleración: Preparación para inversión y mercado",              page: 53,  level: "subtitulo" },
+    { title: "Escalamiento: Vinculación con inversión, mercado y nanciamiento",              page: 56,  level: "subtitulo" },
+    { title: "El respaldo de la conanza: Financiamiento y fondo de garantía",              page: 56,  level: "subtitulo" },
+    { title: "Rubros priorizados: Sectores estratégicos denidos por Cajamarca Incuba",              page: 58,  level: "subtitulo" },
+    { title: "Sostenibilidad financiera",                 page: 60,  level: "titulo" },
+    { title: "Sostenibilidad y diversicación institucional",              page: 61,  level: "subtitulo" },
+    { title: "Nuestras fuentes de financiamiento: Un esfuerzo compartido",              page: 62,  level: "subtitulo" },
+    { title: "Estrategia de diversicación: El equilibrio que nos permite crecer",              page: 63,  level: "subtitulo" },
+    { title: "Desafíos y horizontes: Transformando los retos en oportunidades",              page: 64,  level: "subtitulo" },
+    { title: "Experiencia de emprender",                  page: 65,  level: "titulo" },
+    { title: "Ecoacción",                  page: 67,  level: "titulo" },
+    { title: "Clara Mía",                  page: 68,  level: "titulo" },
+    { title: "Carnifer Bioexport",                  page: 69,  level: "titulo" },
+    { title: "Azul Sostenible",                  page: 70,  level: "titulo" },
+    { title: "Concallua",                  page: 71,  level: "titulo" },
+    { title: "Challwa de Oro",                  page: 72,  level: "titulo" },
+    { title: "Fruturú",                  page: 73,  level: "titulo" },
+    { title: "Mando",                  page: 74,  level: "titulo" },
+    { title: "Byte",                  page: 75,  level: "titulo" },
+    { title: "reflexiones Finales",                  page: 76,  level: "titulo" },
+    { title: "Casos de éxito",                            page: 78,  level: "titulo" },
+    { title: "Caso de éxito de ganadores de fondos concursables.",                  page: 80,  level: "subtitulo" },
+    { title: "Handin",                  page: 81,  level: "titulo" },
+    { title: "InkLop",                  page: 83,  level: "titulo" },
+    { title: "Brixan",                  page: 85,  level: "titulo" },
+    { title: "Guía Pateperro",                  page: 87,  level: "titulo" },
+    { title: "Caso de éxito de emprendedores de UNICA de NEWMONT ALAC.",                  page: 89,  level: "subtitulo" },
+    { title: "Doña Gallina",                  page: 89,  level: "titulo" },
+    { title: "Caso de éxito de la Escuela de Emprendedores de Southern Perú.",                  page: 91,  level: "subtitulo" },
+    { title: "Cata's Boutique",                  page: 91,  level: "titulo" },
+    { title: "Ecoladrillos CCMA",                  page: 93,  level: "titulo" },
+    { title: "reflexiones Finales",                  page: 95,  level: "titulo" },
+    { title: "Lecciones y propuestas",                    page: 96,  level: "titulo" },
+    { title: "Hallazgos del Proceso: Resultados que Hablan de Compromiso",                  page: 97,  level: "subtitulo" },
+    { title: "Lecciones aprendidas institucionales",                  page: 98,  level: "subtitulo" },
+    { title: "El sello de lo que funciona: Buenas prácticas y factores de éxito",                  page: 98,  level: "subtitulo" },
+    { title: "Propuestas de mejora operativas: Hacia una gestión más ágil y efectiva",                  page: 99,  level: "subtitulo" },
+    { title: "Propuestas de mejora estratégicas y de sostenibilidad",                  page: 99,  level: "subtitulo" },
+    { title: "Valor agregado y contribución de Cajamarca Incuba",                  page: 101,  level: "subtitulo" },
+    { title: "Nivel de madurez del modelo de incubación",                  page: 102,  level: "subtitulo" },
+    { title: "Proyección institucional y recomendaciones nales",                  page: 103,  level: "subtitulo" },
+    { title: "Anexos",                                    page: 104, level: "titulo" }
 ];
 
 let pdfDoc         = null;
@@ -512,40 +584,28 @@ function generateTOC() {
     if (!toc) return;
     toc.innerHTML = "";
 
-
-
-    for (let pos = 1; pos <= virtualTotal; pos += 2) {
-        const leftEntry  = pageMap[pos - 1];
-        const rightEntry = pageMap[pos] || null;
-
-
+    // Índice 100% basado en tocConfig (manual e independiente)
+    tocConfig.forEach(entry => {
+        const vPos = pdfPageToVPos(entry.page);
+        const targetPos = isMobile ? vPos : (vPos % 2 === 0 ? vPos - 1 : vPos);
 
         const item = document.createElement("div");
-        item.className = "toc-item";
-        item.dataset.leftPage = pos;
-
-
-
-        const leftLabel = leftEntry.type === "video"
-            ? `<i class="fas fa-play-circle"></i> ${leftEntry.config.title}`
-            : `Páginas ${leftEntry.pdfPage}`;
-        const rightLabel = rightEntry
-            ? (rightEntry.type === "video" ? `📹 ${rightEntry.config.title}` : String(rightEntry.pdfPage))
-            : "";
-
-
+        item.className = `toc-item toc-level-${entry.level}`;
+        item.dataset.leftPage = targetPos;
 
         item.innerHTML = `
-            <span class="toc-title">${leftLabel}</span>
-            <span class="toc-page">${rightLabel}</span>`;
-        item.onclick = () => { goToPage(pos); closeSidebar(); };
+            <span class="toc-title">${entry.title}</span>
+            <span class="toc-page">Pág. ${entry.page}</span>`;
+
+        item.onclick = () => { goToPage(targetPos); closeSidebar(); };
         toc.appendChild(item);
-    }
+    });
 }
 
 
 
 function generateVideoList() {
+ /*   
     const container = document.getElementById("videoPagesList");
     if (!container) return;
     container.innerHTML = "";
@@ -565,6 +625,7 @@ function generateVideoList() {
         });
         container.appendChild(btn);
     });
+    */
 }
 
 

@@ -12,19 +12,19 @@ console.log("Ancho de ventana:", window.innerWidth, "px");
 console.log("═══════════════════════════════════════════");
 
 const videoPagesConfig = [
-    { afterPage: 65, videoId: "Fiq-YWi2yzw",  title: "Ecoacción",          autoplay: true },
-    { afterPage: 66, videoId: "iXkLMzDr5h8",  title: "Clara Mía",          autoplay: true },
-    { afterPage: 67, videoId: "67ELIRWpA8A",  title: "CARNIFER BIOEXPORT", autoplay: true },
-    { afterPage: 69, videoId: "eFYCqwn4m6c",  title: "CONCALLUA",          autoplay: true },
-    { afterPage: 71, videoId: "qpFj0cF-cfQ",  title: "Fruturú",            autoplay: true },
-    { afterPage: 72, videoId: "dBlVl2ycyfw",  title: "MANDO",              autoplay: true },
-    { afterPage: 73, videoId: "EGQMTJQBnBs",  title: "Byte",               autoplay: true },
-    { afterPage: 68, videoId: "3ZJay045efg",  title: "Azul Sostenible",    autoplay: true },
-    { afterPage: 80, videoId: "o5E1ffeBdSk",  title: "HANDIN",             autoplay: true },
-    { afterPage: 84, videoId: "UHhfQyrAnqM",  title: "BRIXSAN",             autoplay: true },
-    { afterPage: 88, videoId: "6ZiEiVrfYrQ",  title: "Doña Gallina",       autoplay: true },
-    { afterPage: 90, videoId: "pc9R2JGTA_s",  title: "Cata's Boutique",    autoplay: true },
-    { afterPage: 101, videoId: "AYh6XMaVguc", title: "Ecosistema emprendedor sostenible",       autoplay: true }
+    { afterPage: 67, videoId: "Fiq-YWi2yzw",  title: "Ecoacción",          autoplay: true },
+    { afterPage: 68, videoId: "iXkLMzDr5h8",  title: "Clara Mía",          autoplay: true },
+    { afterPage: 69, videoId: "67ELIRWpA8A",  title: "CARNIFER BIOEXPORT", autoplay: true },
+    { afterPage: 71, videoId: "eFYCqwn4m6c",  title: "CONCALLUA",          autoplay: true },
+    { afterPage: 73, videoId: "qpFj0cF-cfQ",  title: "Fruturú",            autoplay: true },
+    { afterPage: 74, videoId: "dBlVl2ycyfw",  title: "MANDO",              autoplay: true },
+    { afterPage: 75, videoId: "EGQMTJQBnBs",  title: "Byte",               autoplay: true },
+    { afterPage: 70, videoId: "3ZJay045efg",  title: "Azul Sostenible",    autoplay: true },
+    { afterPage: 82, videoId: "o5E1ffeBdSk",  title: "HANDIN",             autoplay: true },
+    { afterPage: 86, videoId: "UHhfQyrAnqM",  title: "BRIXSAN",             autoplay: true },
+    { afterPage: 90, videoId: "6ZiEiVrfYrQ",  title: "Doña Gallina",       autoplay: true },
+    { afterPage: 92, videoId: "pc9R2JGTA_s",  title: "Cata's Boutique",    autoplay: true },
+    { afterPage: 103, videoId: "AYh6XMaVguc", title: "Ecosistema emprendedor sostenible",       autoplay: true }
 ];
 
 const sectionsConfig = [

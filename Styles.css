@@ -131,14 +131,7 @@ body {
               0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   HEADER NAV â€” RESPONSIVE MÃ“VIL
-   Segunda fila debajo del logo/tÃ­tulo
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-
 @media (max-width: 768px) {
-  /* El header-container ahora permite segunda fila */
   .header-container {
     flex-wrap: wrap;
     padding: 0.25rem 0.5rem 0;
@@ -146,13 +139,9 @@ body {
     min-height: auto;
     align-items: center;
   }
-
-  /* Orden explÃ­cito: fila 1 = logo + tÃ­tulo + menÃº */
   .logo              { order: 1; flex: 0 0 auto; }
   .book-title-header { order: 2; flex: 1; min-width: 0; }
   .menu-btn          { order: 3; flex: 0 0 auto; }
-
-  /* Fila 2: selects ocupan todo el ancho */
   .header-nav {
     order: 4;
     width: 100%;
@@ -161,8 +150,6 @@ body {
     padding: 0.22rem 0 0.28rem;
     border-top: 1px solid rgba(255, 255, 255, 0.12);
   }
-
-  /* Mostrar los grupos (anulamos el display:none anterior) */
   .nav-select-group {
     display: flex;
     flex: 1;
@@ -170,7 +157,6 @@ body {
     gap: 0;
   }
 
-  /* Ocultar etiquetas en mÃ³vil â€” el placeholder hace de label */
   .nav-label {
     display: none;
   }
@@ -183,7 +169,6 @@ body {
     background-position: right 0.5rem center;
   }
 
-  /* Compensar la altura extra del header (fila 2 ~ 32px) */
   .book-container {
     margin-top: 76px;
   }
@@ -440,6 +425,48 @@ body {
   padding: 1.2rem 1.5rem; 
   border-top: 2px solid var(--accent-cream); 
   background: var(--bg-light); 
+}
+
+/* Índice unificado — estilos por nivel */
+.toc-level-titulo {
+  font-weight: 600;
+  border-left: 3px solid var(--primary-medium);
+  background: var(--bg-light);
+}
+
+.toc-level-titulo .toc-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--primary-dark);
+}
+
+.toc-level-subtitulo {
+  padding-left: 1.8rem;
+  border-left: 3px solid rgba(0, 122, 166, 0.3);
+  background: rgba(238, 245, 249, 0.5);
+}
+
+.toc-level-subtitulo .toc-title {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+.toc-level-apartado {
+  padding-left: 2.5rem;
+  border-left: 3px solid rgba(0, 122, 166, 0.15);
+  background: rgba(238, 245, 249, 0.3);
+}
+
+.toc-level-apartado .toc-title {
+  font-size: 0.84rem;
+  font-weight: 400;
+  color: var(--text-light);
+}
+
+.toc-level-apartado .toc-page {
+  font-size: 0.78rem;
+  color: var(--text-light);
 }
 
 .sidebar-section h4 { 

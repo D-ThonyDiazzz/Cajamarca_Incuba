@@ -1,0 +1,21 @@
+{
+  "name": "cajamarca-incuba-libro",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/page-flip": "2.0.4",
+    "typescript": "7.0.2",
+    "vite": "8.2.1"
+  },
+  "dependencies": {
+    "page-flip": "2.0.7",
+    "pdfjs-dist": "6.2.108"
+  }
+}

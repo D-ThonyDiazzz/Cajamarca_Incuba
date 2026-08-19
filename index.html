@@ -5,33 +5,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cajamarca Incuba - Libro Interactivo</title>
-    <link rel="stylesheet" href="Styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 <body>
     <header class="book-header">
         <div class="header-glow"></div>
         <div class="header-container">
             <a href="https://camcajamarca.com.pe/cajamarca-incuba/" class="logo" target="_blank">
-                <img src="assets/images/logo/logo_caj_incuba.png" alt="Cajamarca Incuba">
+                <img src="assets/images/logo/logo_caj_incuba.webp" alt="Cajamarca Incuba">
             </a>
             <nav class="header-nav">
                 <div class="goto-page-top">
                     <span class="page-indicator" id="pageIndicator">
-                        <i class="fas fa-file-alt"></i> Cargando...
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Cargando...
                     </span>
                     <div class="goto-page-container">
-                        <label for="gotoPageInput"><i class="fas fa-search"></i></label>
+                        <label for="gotoPageInput"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></label>
                         <input type="number" id="gotoPageInput" class="goto-page-input" placeholder="Ir a..." min="1">
                         <button id="gotoPageBtn" class="goto-page-btn" title="Ir a página">
-                            <i class="fas fa-arrow-right"></i>
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                         </button>
                     </div>
                 </div>
                 <div class="nav-select-group">
                     <label for="videoSelect" class="nav-label">
-                        <i class="fas fa-video"></i> Videos
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg> Videos
                     </label>
                     <select id="videoSelect" class="nav-select">
                         <option value="">Ir a video...</option>
@@ -39,7 +36,7 @@
                 </div>
                 <div class="nav-select-group">
                     <label for="sectionSelect" class="nav-label">
-                        <i class="fas fa-list-ul"></i> Secciones
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> Secciones
                     </label>
                     <select id="sectionSelect" class="nav-select">
                         <option value="">Ir a sección...</option>
@@ -47,7 +44,7 @@
                     </select>
                 </div>
                 <button class="menu-btn" id="toggleMenu" aria-label="Abrir índice">
-                    <i class="fas fa-bars"></i>
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
                     <span>Índice</span>
                 </button>
             </nav>
@@ -57,9 +54,9 @@
 
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h3><i class="fas fa-book-open"></i> Índice de Contenido</h3>
+            <h3><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Índice de Contenido</h3>
             <button class="close-sidebar" id="closeSidebar" aria-label="Cerrar índice">
-                <i class="fas fa-times"></i>
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
         </div>
         <div class="table-of-contents" id="tableOfContents"></div>
@@ -81,57 +78,19 @@
             <span class="particle"></span>
         </div>
         <button class="nav-arrow left-arrow" id="prevBtn" aria-label="Página anterior">
-            <i class="fas fa-chevron-left"></i>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
         </button>
-        <div class="book-3d" id="book">
-            <div class="page left-static">
-                <div class="page-content">
-                    <canvas id="leftCanvas"></canvas>
-                    <div id="leftVideoLayer" class="video-layer"></div>
-                    <div class="page-footer"><span id="leftPageNum"></span></div>
-                    <div class="shadow-overlay-left"></div>
-                </div>
-            </div>
-            <div class="page right-static">
-                <div class="page-content">
-                    <canvas id="rightCanvas"></canvas>
-                    <div id="rightVideoLayer" class="video-layer"></div>
-                    <div class="page-footer"><span id="rightPageNum"></span></div>
-                    <div class="shadow-overlay-right"></div>
-                </div>
-            </div>
-            <div class="page flipper" id="flipper">
-                <div class="flipper-face front">
-                    <div class="page-content">
-                        <canvas id="flipFrontCanvas"></canvas>
-                        <div id="flipFrontVideoLayer" class="video-layer"></div>
-                        <div class="page-footer"><span id="flipFrontNum"></span></div>
-                        <div class="lighting-effect front-shine"></div>
-                    </div>
-                </div>
-                <div class="flipper-face back">
-                    <div class="page-content">
-                        <canvas id="flipBackCanvas"></canvas>
-                        <div id="flipBackVideoLayer" class="video-layer"></div>
-                        <div class="page-footer"><span id="flipBackNum"></span></div>
-                        <div class="lighting-effect back-shadow"></div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="spine"></div>
-        </div>
+        <div class="book-3d" id="book"></div>
         <button class="nav-arrow right-arrow" id="nextBtn" aria-label="Página siguiente">
-            <i class="fas fa-chevron-right"></i>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
         </button>
         <div class="mobile-nav" id="mobileNav">
             <button class="mobile-nav-btn" id="mobilePrev">
-                <i class="fas fa-chevron-left"></i> Anterior
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg> Anterior
             </button>
             <span class="mobile-page-indicator" id="mobilePageIndicator">1 / 96</span>
             <button class="mobile-nav-btn" id="mobileNext">
-                Siguiente <i class="fas fa-chevron-right"></i>
+                Siguiente <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
             </button>
         </div>
     </main>
@@ -141,7 +100,7 @@
     <div class="book-loader" id="loader">
         <div class="loader-content">
             <div class="loader-icon">
-                <i class="fas fa-book-open fa-3x"></i>
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
                 <div class="loader-circle"></div>
             </div>
             <h3>CAJAMARCA INCUBA</h3>
@@ -151,6 +110,6 @@
             </div>
         </div>
     </div>
-    <script src="script.js"></script>
+    <script type="module" src="/src/main.ts"></script>
 </body>
 </html>

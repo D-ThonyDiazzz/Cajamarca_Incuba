@@ -1623,28 +1623,50 @@ canvas {
   background: linear-gradient(160deg, rgba(240, 247, 250, 0.5) 0%, rgba(255, 255, 255, 0) 55%);
 }
 
+/*
+ * Marco de luz ambiental para toda la página (no solo el área del libro):
+ * dos resplandores suaves anclados a esquinas opuestas del viewport, en la
+ * misma paleta azul/dorado de la marca. Vive fuera de .book-container y
+ * usa position:fixed para enmarcar también el header. Los blobs son
+ * elementos reales (no pseudo-elementos) para que backgroundFx.ts los
+ * anime con GSAP (deriva + paralaje).
+ */
+.page-frame-glow {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  /*
+   * Sin z-index a propósito: al ser el primer hijo de <body> (antes del
+   * header y de .book-container, que tampoco declaran z-index), el orden
+   * del DOM ya lo pinta detrás de todo. Ponerle un z-index explícito aquí
+   * lo sacaría del grupo "auto" y lo pondría por ENCIMA de .book-container
+   * (que no tiene z-index propio), tapando el libro.
+   */
+}
+
 .ambient-blob {
   position: absolute;
   border-radius: 50%;
-  opacity: 0.28;
+  opacity: 0.34;
   will-change: transform;
-  filter: blur(90px);
+  filter: blur(95px);
 }
 
 .ambient-blob-1 {
-  width: 620px;
-  height: 620px;
-  background: radial-gradient(circle, rgba(10, 61, 143, 0.9) 0%, rgba(26, 95, 180, 0.6) 45%, transparent 72%);
-  top: -180px;
-  left: -160px;
+  width: 680px;
+  height: 680px;
+  background: radial-gradient(circle, var(--accent-gold) 0%, rgba(244, 195, 0, 0.5) 40%, transparent 72%);
+  top: -70px;
+  right: -190px;
 }
 
 .ambient-blob-2 {
-  width: 520px;
-  height: 520px;
-  background: radial-gradient(circle, rgba(244, 195, 0, 0.75) 0%, transparent 72%);
-  bottom: -140px;
-  right: -140px;
+  width: 620px;
+  height: 620px;
+  background: radial-gradient(circle, #0a3d8f 0%, var(--primary-light) 42%, transparent 72%);
+  bottom: -70px;
+  left: -170px;
 }
 
 @media (max-width: 768px) {

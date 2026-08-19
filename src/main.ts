@@ -7,6 +7,7 @@ import { createSidebar } from "./ui/sidebar";
 import { createToc } from "./ui/toc";
 import { createControls } from "./ui/controls";
 import { createLoader } from "./ui/loader";
+import { initBackgroundFx } from "./ui/backgroundFx";
 
 const DEBUG = /[?&]debug=1\b/.test(location.search);
 const log = DEBUG ? console.log.bind(console) : () => {};
@@ -23,6 +24,21 @@ let controls: ReturnType<typeof createControls> | undefined;
 function checkMobile(): void {
     isMobile = window.innerWidth <= 768;
 }
+
+// El header es de altura variable (puede envolver a 2-3 filas en anchos
+// intermedios), así que en vez de asumir un alto fijo en CSS, se mide el
+// real y se publica en --header-height (leído por .book-container).
+function syncHeaderHeight(): void {
+    const header = document.querySelector<HTMLElement>(".book-header");
+    if (!header) return;
+    const set = () => {
+        document.documentElement.style.setProperty("--header-height", `${header.getBoundingClientRect().height}px`);
+    };
+    set();
+    new ResizeObserver(set).observe(header);
+}
+syncHeaderHeight();
+initBackgroundFx();
 
 const sidebar = createSidebar(
     document.getElementById("sidebar")!,

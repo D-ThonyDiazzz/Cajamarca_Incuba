@@ -1091,33 +1091,13 @@ canvas {
     height: 20px;
     font-size: 0.65rem;
   }
-  .decoration-bg {
-    display: block !important;
-    opacity: 0.6;
-  }
-
   .book-container::before {
     background-size: 25px 25px;
-    opacity: 0.5;
   }
-  
-  .book-container::after {
-    opacity: 0.6;
-  }
-  
-  .decoration-bg::before,
-  .decoration-bg::after {
-    opacity: 0.08;
-    filter: blur(40px);
-  }
-  
-  .floating-particles {
-    display: block;
-  }
-  
-  .particle {
-    width: 4px;
-    height: 4px;
+
+  .ambient-blob {
+    opacity: 0.16;
+    filter: blur(50px);
   }
 
   .book-3d {
@@ -1604,40 +1584,34 @@ canvas {
   }
 }
 
+/*
+ * Fondo ambiental: un tejido sutil de puntos + un lavado de color muy suave
+ * detrás del libro, más dos "blobs" reales (no pseudo-elementos, para que
+ * backgroundFx.ts los pueda animar con GSAP: deriva orgánica + paralaje al
+ * mover el mouse). Reemplaza el efecto anterior de partículas ascendiendo
+ * tipo "burbujas" y los blobs que rebotaban en 3 pasos con CSS keyframes,
+ * que se sentían más a plantilla genérica que a marca cuidada.
+ */
 .book-container::before {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: 
-    radial-gradient(circle, rgba(0, 163, 196, 0.25) 2px, transparent 2px);
-  background-size: 35px 35px;
+  background-image:
+    radial-gradient(circle, rgba(0, 163, 196, 0.16) 1.5px, transparent 1.5px);
+  background-size: 38px 38px;
   pointer-events: none;
   z-index: 1;
-  opacity: 1;
 }
 
 .book-container::after {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: 
-    radial-gradient(ellipse at 30% 40%, rgba(10, 61, 143, 0.15) 0%, transparent 40%),
-    radial-gradient(ellipse at 70% 60%, rgba(244, 195, 0, 0.12) 0%, transparent 40%),
-    radial-gradient(ellipse at 50% 80%, rgba(0, 163, 196, 0.08) 0%, transparent 35%);
+  background-image:
+    radial-gradient(ellipse at 30% 40%, rgba(10, 61, 143, 0.1) 0%, transparent 40%),
+    radial-gradient(ellipse at 70% 60%, rgba(244, 195, 0, 0.08) 0%, transparent 40%);
   pointer-events: none;
   z-index: 1;
-  animation: waveShift 15s ease-in-out infinite;
-}
-
-@keyframes waveShift {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.8;
-    transform: scale(1.05);
-  }
 }
 
 .decoration-bg {
@@ -1646,213 +1620,49 @@ canvas {
   overflow: hidden;
   pointer-events: none;
   z-index: 0;
-  background: 
-    radial-gradient(ellipse at 20% 20%, rgba(0, 163, 196, 0.35), transparent 50%),
-    radial-gradient(ellipse at 80% 80%, rgba(244, 195, 0, 0.25), transparent 50%),
-    linear-gradient(135deg, rgba(240, 247, 250, 0.6) 0%, rgba(255, 255, 255, 0) 100%);
+  background: linear-gradient(160deg, rgba(240, 247, 250, 0.5) 0%, rgba(255, 255, 255, 0) 55%);
 }
 
-.decoration-bg::before,
-.decoration-bg::after {
-  content: "";
+.ambient-blob {
   position: absolute;
   border-radius: 50%;
-  opacity: 0.35;
-  pointer-events: none;
-  filter: blur(80px);
+  opacity: 0.28;
+  will-change: transform;
+  filter: blur(90px);
 }
 
-.decoration-bg::before {
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, #0a3d8f 0%, #1a5fb4 40%, transparent 70%);
-    top: -150px;
-    left: -150px;
-    animation: float1 20s ease-in-out infinite;
+.ambient-blob-1 {
+  width: 620px;
+  height: 620px;
+  background: radial-gradient(circle, rgba(10, 61, 143, 0.9) 0%, rgba(26, 95, 180, 0.6) 45%, transparent 72%);
+  top: -180px;
+  left: -160px;
 }
 
-.decoration-bg::after {
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, var(--accent-gold) 0%, transparent 70%);
-  bottom: -120px;
-  right: -120px;
-  animation: float2 18s ease-in-out infinite;
-}
-
-@keyframes float1 {
-  0%, 100% { 
-    transform: translate(0, 0) scale(1); 
-    opacity: 0.35;
-  }
-  33% { 
-    transform: translate(80px, -60px) scale(1.15); 
-    opacity: 0.45;
-  }
-  66% { 
-    transform: translate(-60px, 70px) scale(0.9); 
-    opacity: 0.3;
-  }
-}
-
-@keyframes float2 {
-  0%, 100% { 
-    transform: translate(0, 0) rotate(0deg); 
-    opacity: 0.35;
-  }
-  50% { 
-    transform: translate(-70px, 60px) rotate(12deg); 
-    opacity: 0.45;
-  }
-}
-
-.floating-particles {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 2;
-}
-
-.particle {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background: var(--primary-light);
-  border-radius: 50%;
-  opacity: 0;
-  box-shadow: 0 0 20px rgba(0, 163, 196, 0.6);
-  animation: floatUp 12s linear infinite;
-}
-
-.particle:nth-child(1) {
-  left: 10%;
-  animation-delay: 0s;
-  animation-duration: 14s;
-  background: var(--primary-light);
-}
-
-.particle:nth-child(2) {
-  left: 25%;
-  animation-delay: 2s;
-  animation-duration: 16s;
-  background: var(--accent-gold);
-  box-shadow: 0 0 20px rgba(244, 195, 0, 0.6);
-}
-
-.particle:nth-child(3) {
-  left: 40%;
-  animation-delay: 4s;
-  animation-duration: 13s;
-  background: var(--primary-medium);
-}
-
-.particle:nth-child(4) {
-  left: 55%;
-  animation-delay: 6s;
-  animation-duration: 15s;
-  background: var(--primary-light);
-}
-
-.particle:nth-child(5) {
-  left: 70%;
-  animation-delay: 8s;
-  animation-duration: 17s;
-  background: var(--accent-gold);
-  box-shadow: 0 0 20px rgba(244, 195, 0, 0.6);
-}
-
-.particle:nth-child(6) {
-  left: 85%;
-  animation-delay: 10s;
-  animation-duration: 14s;
-  background: var(--primary-medium);
-}
-
-.particle:nth-child(7) {
-  left: 18%;
-  animation-delay: 3s;
-  animation-duration: 16s;
-  background: var(--primary-light);
-}
-
-.particle:nth-child(8) {
-  left: 65%;
-  animation-delay: 7s;
-  animation-duration: 15s;
-  background: var(--accent-gold);
-  box-shadow: 0 0 20px rgba(244, 195, 0, 0.6);
-}
-
-@keyframes floatUp {
-  0% {
-    transform: translateY(100vh) scale(0);
-    opacity: 0;
-  }
-  10% {
-    opacity: 0.4;
-  }
-  50% {
-    opacity: 0.6;
-  }
-  90% {
-    opacity: 0.3;
-  }
-  100% {
-    transform: translateY(-100px) translateX(40px) scale(1.2);
-    opacity: 0;
-  }
+.ambient-blob-2 {
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(circle, rgba(244, 195, 0, 0.75) 0%, transparent 72%);
+  bottom: -140px;
+  right: -140px;
 }
 
 @media (max-width: 768px) {
   .book-container::before {
-    background-image: 
-      radial-gradient(circle, rgba(0, 163, 196, 0.2) 2px, transparent 2px);
+    background-image:
+      radial-gradient(circle, rgba(0, 163, 196, 0.16) 1.5px, transparent 1.5px);
     background-size: 25px 25px;
-    opacity: 0.8;
   }
-  
-  .book-container::after {
-    opacity: 0.7;
-  }
-  
-  .decoration-bg {
-    display: block !important;
-    opacity: 0.8;
-  }
-  
-  .decoration-bg::before,
-  .decoration-bg::after {
-    opacity: 0.25;
+
+  .ambient-blob {
+    opacity: 0.2;
     filter: blur(60px);
-  }
-  
-  .floating-particles {
-    display: block;
-  }
-  
-  .particle {
-    width: 7px;
-    height: 7px;
-    box-shadow: 0 0 15px rgba(0, 163, 196, 0.5);
   }
 }
 
 @media (max-width: 480px) {
   .book-container::before {
     background-size: 20px 20px;
-    opacity: 0.6;
-  }
-  
-  .particle {
-    width: 5px;
-    height: 5px;
-  }
-}
-
-@media (max-width: 768px) and (orientation: landscape) {
-  .decoration-bg {
-    opacity: 0.75;
   }
 }
 
@@ -1963,7 +1773,14 @@ canvas {
 
 .goto-page-btn:active { transform: scale(0.95); }
 
-@media (min-width: 769px) {
+/*
+ * La píldora "ir a página" se centra de forma absoluta solo en pantallas
+ * anchas, donde sobra espacio a los costados del logo y los selects. Por
+ * debajo de ese ancho (pero todavía por encima del breakpoint mobile) se
+ * deja en el flujo normal del header-nav para que no se superponga con
+ * los selects/botón Índice cuando estos necesitan más espacio.
+ */
+@media (min-width: 1300px) {
     .header-container {
         position: relative;
     }
@@ -1983,6 +1800,52 @@ canvas {
         text-overflow: ellipsis;
         white-space: nowrap;
         display: inline-flex;
+    }
+}
+
+/*
+ * En este rango intermedio no cabe todo en una sola fila, así que el header
+ * pasa a una cuadrícula de 2 filas prolijas a la derecha del logo: arriba la
+ * píldora "ir a página" centrada y a todo lo ancho; abajo los dos selects y
+ * el botón Índice, agrupados y centrados. El salto de línea se logra dándole
+ * a la píldora flex-basis:100% (truco flexbox: un ítem a ancho completo
+ * siempre empuja a los siguientes a la fila de abajo), sin tocar el HTML.
+ */
+@media (min-width: 769px) and (max-width: 1299px) {
+    .header-container {
+        align-items: center;
+        padding-top: 0.7rem;
+        padding-bottom: 0.7rem;
+    }
+    .header-nav {
+        flex: 1;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        column-gap: 1.25rem;
+        row-gap: 0.65rem;
+    }
+    .goto-page-top {
+        position: static;
+        transform: none;
+        margin-bottom: 0;
+        flex: 1 1 100%;
+        max-width: none;
+        justify-content: center;
+        order: 1;
+    }
+    .goto-page-top .page-indicator {
+        max-width: 160px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: inline-flex;
+    }
+    .nav-select-group {
+        order: 2;
+    }
+    .menu-btn {
+        order: 3;
     }
 }
 
@@ -2020,9 +1883,14 @@ canvas {
   .book-container  { margin-top: 110px; }
 }
 
+/*
+ * El header es de altura variable en el rango 769-1299px (puede envolver a
+ * 2 o 3 filas según el ancho exacto), así que en vez de adivinar un valor
+ * fijo, main.ts mide su alto real y lo publica en --header-height.
+ */
 @media (min-width: 769px) {
     .book-container {
-        margin-top: 90px;
+        margin-top: var(--header-height, 90px);
         padding-top: 1.5rem;
     }
 }
